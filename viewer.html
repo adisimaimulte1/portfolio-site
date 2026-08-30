@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Robot Viewer · Adrian Contras</title>
+  <link rel="icon" type="image/png" href="assets/icons/site-icon.png">
+  <link rel="stylesheet" href="src/styles/viewer.css">
+  <script src="src/scripts/viewer.js" type="module"></script>
+</head>
+<body>
+  <main class="viewer" id="viewer">
+    <canvas class="viewer__canvas" id="model-canvas" aria-label="Interactive 3D robot model"></canvas>
+    <img class="viewer__poster" id="model-poster" alt="">
+
+    <header class="viewer__header">
+      <div>
+        <p class="viewer__eyebrow">Interactive CAD preview</p>
+        <h1 class="viewer__title" id="model-title">Loading model…</h1>
+      </div>
+    </header>
+
+    <div class="viewer__controls">
+      <button type="button" id="reset-view" hidden>Reset view</button>
+    </div>
+
+    <div class="viewer__progress" id="model-progress" role="status">
+      <span class="viewer__progress-bar" id="model-progress-bar"></span>
+      <span id="model-status">Preparing 3D viewer…</span>
+    </div>
+
+    <p class="viewer__hint">Drag to rotate · scroll or pinch to zoom</p>
+  </main>
+</body>
+</html>

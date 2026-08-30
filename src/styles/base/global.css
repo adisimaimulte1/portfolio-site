@@ -1,0 +1,10 @@
+* { box-sizing:border-box; }
+html { min-height:100%; scroll-behavior:smooth; }
+body { min-height:100vh; margin:0; color:var(--color-text); background:var(--color-background); font-family:var(--font-code); transition:color var(--transition-theme),background-color var(--transition-theme); }
+button,input { font:inherit; }
+.accent,.prompt__part { color:var(--color-accent); }
+.accent-orange { color:#d65a00; }
+.accent-purple { color:#7b5ac6; }
+.accent-strawberry { color:#e4475b; }
+.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+@media (prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:.01ms!important; animation-duration:.01ms!important; } }

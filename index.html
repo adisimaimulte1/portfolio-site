@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adrian Contras</title>
+  <link rel="icon" type="image/png" href="assets/icons/site-icon.png">
+  <link rel="stylesheet" href="src/styles/main.css">
+  <script src="src/scripts/app.js" type="module"></script>
+</head>
+<body>
+  <main class="terminal" aria-label="Adrian's interactive portfolio terminal">
+    <div class="terminal__intro" aria-hidden="true">
+      <p>Adrian Contras [Version 1.0]</p>
+      <p>Type <span class="accent" id="shell-help-command">help</span> to see the available commands.</p>
+    </div>
+
+    <div class="terminal__session">
+      <div class="terminal__history" id="terminal-history" aria-live="polite" aria-atomic="false"></div>
+
+      <form class="terminal__form" id="terminal-form" autocomplete="off" hidden>
+        <label class="sr-only" for="terminal-input">Enter a portfolio command</label>
+        <span class="prompt" aria-hidden="true"><span class="prompt__shell">PS C:\</span><span class="prompt__part">Users</span><span class="prompt__shell">\</span><span class="prompt__part">Adrian</span><span class="prompt__shell">\</span><span class="prompt__part">Portfolio</span><span class="prompt__shell">&gt;</span></span>
+        <input class="terminal__input" id="terminal-input" type="text" inputmode="text" spellcheck="false" autocapitalize="off" aria-describedby="terminal-hint">
+      </form>
+      <p class="terminal__hint" id="terminal-hint">Enter a command or select one from the help list. Use ↑ and ↓ for command history.</p>
+    </div>
+  </main>
+
+  <button class="theme-button" id="theme-button" type="button" aria-label="Switch to dark theme" aria-pressed="false">
+    <span class="theme-button__icons" aria-hidden="true">
+      <svg class="theme-icon theme-icon--sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path></svg>
+      <svg class="theme-icon theme-icon--moon" viewBox="0 0 24 24"><path d="M20.4 14.5A8.5 8.5 0 0 1 9.5 3.6 8.5 8.5 0 1 0 20.4 14.5Z"></path></svg>
+      <img class="theme-icon theme-icon--strawberry" src="assets/icons/strawberry.svg" alt="">
+    </span>
+  </button>
+</body>
+</html>

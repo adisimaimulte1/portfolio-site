@@ -1,0 +1,40 @@
+.terminal { width:min(1040px,calc(100% - 48px)); min-height:100vh; margin-inline:auto; padding:clamp(48px,8vw,96px) 0 130px; }
+.terminal__intro { margin-bottom:0; color:var(--color-muted); font-size:clamp(.78rem,1.6vw,.95rem); line-height:1.65; }
+.terminal__intro p { margin:0; }
+.terminal__session { margin-top:34px; }
+.terminal__history { display:grid; gap:var(--space-command); }
+.history-entry__command { display:flex; flex-wrap:wrap; gap:.65ch; margin:0 0 18px; overflow-wrap:anywhere; }
+.history-entry__output { position:relative; padding-left:clamp(14px,3vw,30px); }
+.history-entry__output::before { position:absolute; inset:0 auto 0 0; width:2px; background:var(--color-text); content:""; transform-origin:top; }
+.history-entry__output.reveal-frame::before { animation:output-rail-reveal 320ms ease-out both; animation-delay:inherit; }
+.history-entry__output>:first-child { margin-top:0; } .history-entry__output>:last-child { margin-bottom:0; }
+.prompt { flex:none; color:var(--color-text); font-weight:700; }
+.terminal__form { display:flex; align-items:center; gap:.65ch; margin-top:var(--space-command); scroll-margin-block:32px; }
+.terminal__history:empty + .terminal__form { margin-top:0; }
+.terminal__form[hidden] { display:flex !important; visibility:hidden; pointer-events:none; }
+.terminal__input { min-width:40px; flex:1; padding:0; color:var(--color-text); background:transparent; border:0; caret-color:var(--color-text); line-height:inherit; outline:0; }
+.terminal__hint { margin:12px 0 0; color:var(--color-muted); font-size:.7rem; line-height:1.5; }
+.terminal__hint[hidden] { display:none; }
+.help-intro,.output-copy,.empty-output,.error-output { max-width:850px; line-height:1.75; }
+.help-intro,.empty-output { color:var(--color-muted); }
+.output-copy { color:var(--color-text); font-size:clamp(.95rem,2vw,1.12rem); }
+.output-copy p { margin:0 0 20px; }
+.output-copy p:last-child { margin-bottom:0; }
+.about-greeting { margin:0 0 28px; color:var(--color-text); font-size:clamp(2.8rem,8vw,6.5rem); line-height:.95; letter-spacing:-.06em; }
+.command-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:2px 30px; max-width:780px; margin:24px 0 0; padding:0; list-style:none; }
+.command-button { display:grid; grid-template-columns:minmax(90px,130px) 1fr; gap:16px; width:100%; padding:12px 0; color:var(--color-text); background:none; border:0; border-bottom:1px solid var(--color-border); text-align:left; cursor:pointer; }
+.command-button__name { color:var(--color-accent); font-weight:700; } .command-button__description { color:var(--color-muted); }
+.command-button:hover .command-button__name,.command-button:focus-visible .command-button__name { text-decoration:underline; text-underline-offset:4px; }
+.command-button:focus-visible { outline:2px solid var(--color-accent); outline-offset:3px; }
+.inline-command { display:inline; padding:0; background:none; border:0; cursor:pointer; }
+.strawberry-egg { display:flex; align-items:center; gap:16px; font-size:clamp(2rem,6vw,4rem); font-weight:700; }
+.strawberry-egg__icon { width:1.15em; height:1.15em; object-fit:contain; filter:brightness(0) invert(1) drop-shadow(0 8px 18px rgba(228,71,91,.2)); }
+.strawberry-egg__heart { color:var(--color-text); }
+.hobby-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 30px; max-width:780px; margin:20px 0 0; padding:0; list-style:none; }
+.hobby-item { padding:12px 0; color:var(--color-text); border-bottom:1px solid var(--color-border); }
+.reveal-line { animation:terminal-reveal 320ms ease-out both; }
+.reveal-frame { animation:section-line-reveal 320ms ease-out both; }
+@keyframes terminal-reveal { from { opacity:0; transform:translateY(7px); filter:blur(2px); } to { opacity:1; transform:none; filter:none; } }
+@keyframes section-line-reveal { from { border-color:transparent; } to { border-color:var(--color-text); } }
+@keyframes output-rail-reveal { from { opacity:0; transform:scaleY(0); } to { opacity:1; transform:scaleY(1); } }
+@media (max-width:700px) { .terminal { width:min(100% - 24px,1040px); padding-top:32px; } .command-list,.hobby-list { grid-template-columns:1fr; } .terminal__form { align-items:flex-start; } }
