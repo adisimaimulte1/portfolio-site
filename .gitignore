@@ -22,6 +22,15 @@ dist/
 build/
 coverage/
 .cache/
+originals/
+media-originals/
+*.MOV
+*.mov
+*.CR2
+*.CR3
+*.NEF
+*.ARW
+*.DNG
 .parcel-cache/
 
 *.log
@@ -37,4 +46,3 @@ pnpm-debug.log*
 *.bak
 *.swp
 *~
-

@@ -1,8 +1,184 @@
 export const PROJECTS = Object.freeze([
   {
+    year: 2025,
+    timelineOrder: 2,
+    title: "Sideswipe V2",
+    id: "sideswipe-v2",
+    categories: ["Robotics", "CAD"],
+    competition: "FTC",
+    summary: "The first fully built and competition-tested Sideswipe robot, optimized around simpler packaging, reliability, and fast intake-to-shoot transfer.",
+    details: [
+      "~14 kg robot mass; ~290 RPM spindexer; ~1150 RPM intake; ~862 RPM swerve; ~861 g flywheel rotating mass.",
+      "Dual-motor fixed flywheel shooter, with the swerve drivetrain providing full-field aiming instead of a turret.",
+      "3-position passive spindexer supported by a lazy-susan bearing.",
+      "Pivoting single-roller intake and compact belt-driven over-center endgame.",
+      "HuskyLens vision system."
+    ],
+    tags: ["Fusion 360", "FTC", "CAD", "Swerve", "Flywheel", "Spindexer", "HuskyLens"],
+    galleryMode: "cad",
+    media: [
+      "assets/projects/sideswipe_v2/Sideswipe_v2_1.webp",
+      "assets/projects/sideswipe_v2/Sideswipe_v2_2.webp",
+      "assets/projects/sideswipe_v2/Sideswipe_v2_3.webp"
+    ],
+    links: [
+      { label: "View Fusion 360 CAD", href: "https://a360.co/4A1exk2", resourceType: "preview" },
+      { label: "Engineering documentation", href: "https://canva.link/r0n7cg3halsxqgx" }
+    ]
+  },
+  {
+    year: 2026,
+    timelineOrder: 0,
+    title: "Sideswipe V3",
+    id: "sideswipe-v3",
+    categories: ["Robotics", "CAD"],
+    competition: "FTC",
+    summary: "Final optimized DECODE competition robot built around a compact carbon-fiber chassis, custom coaxial swerve, high-speed spindexer, and heavily instrumented control system.",
+    details: [
+      "Romania's first fully pocketed carbon-fiber FTC robot: an 11 kg, 13\" × 13\" design, down from ~14 kg on V2 (~21% lighter), with bare motors and carbon-fiber shafts.",
+      "Custom 3D-printed coaxial swerve reaches 900 RPM (~862 on V2, ~4% faster); the intake reaches 1500 RPM (~1150, ~30% faster).",
+      "A bearing-stack spindexer runs at 500 RPM (~290 on V2, ~72% faster), shooting 3 balls in ~0.3 s; an MGN-rail endgame extension reaches 38 cm above ground in ~1.5 s.",
+      "Control software combines 3 color sensors, 1 magnetic sensor, 2 odometry pods with Pinpoint, motor encoders, etc."
+    ],
+    tags: ["Fusion 360", "FTC", "CAD", "Carbon Fiber", "Coaxial Swerve", "3D Printing", "Odometry"],
+    galleryMode: "cad",
+    media: [
+      "assets/projects/sideswipe_v3/Sideswipe_v3_1.webp",
+      "assets/projects/sideswipe_v3/Sideswipe_v3_2.webp",
+      "assets/projects/sideswipe_v3/Sideswipe_v3_3.webp"
+    ],
+    matchGroups: [
+      {
+        "title": "Nationals",
+        "matches": [
+          {
+            "label": "Q9",
+            "day": 1,
+            "href": "https://www.youtube.com/watch?v=pvmxbH8YW-k&t=14775s"
+          },
+          {
+            "label": "Q16",
+            "day": 1,
+            "href": "https://www.youtube.com/watch?v=pvmxbH8YW-k&t=17390s"
+          },
+          {
+            "label": "Q28",
+            "day": 2,
+            "href": "https://www.youtube.com/watch?v=zG45zl5pcDw&t=2959s"
+          },
+          {
+            "label": "Q48",
+            "day": 2,
+            "href": "https://www.youtube.com/watch?v=zG45zl5pcDw&t=18235s"
+          },
+          {
+            "label": "Q58",
+            "day": 2,
+            "href": "https://www.youtube.com/watch?v=zG45zl5pcDw&t=23380s"
+          },
+          {
+            "label": "Q64",
+            "day": 2,
+            "href": "https://www.youtube.com/watch?v=zG45zl5pcDw&t=25400s"
+          }
+        ]
+      },
+      {
+        "title": "Regionals",
+        "matches": [
+          {
+            "label": "Q5",
+            "day": 1,
+            "href": "https://www.youtube.com/watch?v=5Ebi2-1rlEQ&t=4448s"
+          },
+          {
+            "label": "Q8",
+            "day": 1,
+            "href": "https://www.youtube.com/watch?v=5Ebi2-1rlEQ&t=9300s"
+          },
+          {
+            "label": "Q18",
+            "day": 1,
+            "href": "https://www.youtube.com/watch?v=5Ebi2-1rlEQ&t=14857s"
+          },
+          {
+            "label": "Q21",
+            "day": 1,
+            "href": "https://www.youtube.com/watch?v=5Ebi2-1rlEQ&t=18566s"
+          },
+          {
+            "label": "Q32",
+            "day": 2,
+            "href": "https://www.youtube.com/watch?v=k-pGHb2_ZjI&t=1569s"
+          },
+          {
+            "label": "Q37",
+            "day": 2,
+            "href": "https://www.youtube.com/watch?v=k-pGHb2_ZjI&t=4007s"
+          },
+          {
+            "label": "M2",
+            "day": 2,
+            "href": "https://www.youtube.com/watch?v=k-pGHb2_ZjI&t=11417s"
+          },
+          {
+            "label": "M4",
+            "day": 2,
+            "href": "https://www.youtube.com/watch?v=k-pGHb2_ZjI&t=12270s"
+          },
+          {
+            "label": "M7",
+            "day": 2,
+            "href": "https://www.youtube.com/watch?v=k-pGHb2_ZjI&t=17296s",
+            "note": "Robot fully died: snapped cable. :("
+          },
+          {
+            "label": "M9",
+            "day": 2,
+            "href": "https://www.youtube.com/watch?v=k-pGHb2_ZjI&t=15320s"
+          }
+        ]
+      }
+    ],
+    links: [
+      { label: "View Fusion 360 CAD", href: "https://a360.co/3T76xgV", resourceType: "preview" },
+      { label: "Robot code", href: "https://github.com/exorosFTC/DeCodE" },
+      { label: "League meets early robot matches", href: "https://www.youtube.com/playlist?list=PLtbQ-qkLkCe2lX5gubuAySoLrI9SkwYoT" },
+      { label: "Engineering documentation", href: "https://canva.link/r0n7cg3halsxqgx" }
+    ]
+  },
+  {
+    year: 2026,
+    timelineOrder: 3,
+    title: "A-Shell",
+    id: "a-shell",
+    categories: ["Software"],
+    competition: "Personal project",
+    summary: "A reversible Windows customization environment combining a minimal desktop, native Matrix rain, monochrome UI, and a cohesive command-line interface.",
+    details: [
+      "Built with C++ / Win32 and PowerShell, combining lightweight Matrix rendering, shared appearance controls, and automatic monochrome icon matching.",
+      "Preserves the original Windows setup through reversible CLI commands, persistent feature switches, and installer upgrades / repairs that retain user state."
+    ],
+    tags: ["Windows", "C++", "PowerShell", "Native", "CLI", "Win32", "Desktop Customization"],
+    galleryMode: "square-static",
+    media: [
+      "assets/projects/a_shell/A-Shell_Logo_Original_HQ.webp",
+      "assets/projects/a_shell/ashell1.webp",
+      "assets/projects/a_shell/ashell2.webp"
+    ],
+    links: [
+      { label: "GitHub repository", href: "https://github.com/adisimaimulte1/a-shell" },
+      { label: "Download Windows installer", href: "https://github.com/adisimaimulte1/a-shell/releases/latest" }
+    ],
+    archives: [
+      { label: "Illustrator source files", href: "assets/projects/a_shell/illustrator.zip" }
+    ]
+  },
+  {
     year: 2026,
     timelineOrder: 1,
     title: "DECODE Differential Turret",
+    id: "decode-turret",
     categories: ["CAD", "Mechanical Design"],
     competition: "FTC",
     summary: "An experimental infinite-rotation differential turret and flywheel developed for Team 24310 EXOROS after the DECODE season.",
@@ -14,9 +190,9 @@ export const PROJECTS = Object.freeze([
     tags: ["Fusion 360", "FTC", "CAD", "Differential", "Flywheel"],
     galleryMode: "cad",
     media: [
-      "assets/projects/diffy_turret/diffy_1.png",
-      "assets/projects/diffy_turret/diffy_2.png",
-      "assets/projects/diffy_turret/diffy_3.png"
+      "assets/projects/diffy_turret/diffy_1.webp",
+      "assets/projects/diffy_turret/diffy_2.webp",
+      "assets/projects/diffy_turret/diffy_3.webp"
     ],
     links: [
       { label: "View Fusion 360 CAD", href: "https://a360.co/4ck3NSS", resourceType: "preview" }
@@ -26,6 +202,7 @@ export const PROJECTS = Object.freeze([
     year: 2026,
     timelineOrder: 2,
     title: "Unilearn",
+    id: "unilearn",
     categories: ["Software", "Marketing"],
     competition: "InfoEducație",
     summary: "An Android space sandbox game that turns astronomy into an interactive universe for experimentation, discovery, and learning.",
@@ -44,14 +221,15 @@ export const PROJECTS = Object.freeze([
       ]
     },
     media: [
-      "assets/projects/unilearn/unilearn_github.png",
-      "assets/projects/unilearn/unilearn_1.png",
-      "assets/projects/unilearn/unilearn_3.png"
+      "assets/projects/unilearn/unilearn_github.webp",
+      "assets/projects/unilearn/unilearn_1.webp",
+      "assets/projects/unilearn/unilearn_3.webp"
     ],
     links: [
       { label: "GitHub repository", href: "https://github.com/adisimaimulte1/unilearn-extended" },
       { label: "View documentation", href: "https://canva.link/5lo3nyut9nj6vlx" },
       { label: "Nationals presentation", href: "https://canva.link/iyfb7ynp26902tr" },
+      { label: "Watch nationals presentation", href: "https://drive.google.com/file/d/1zqtpsWw9P_Z7WXkmjsKWGDP64dmFTck_/view?usp=drive_link" },
       { label: "Download Android release", href: "https://github.com/adisimaimulte1/unilearn-extended/releases/tag/V.2.0.0" },
       { label: "Planet Hunt flyers", href: "https://canva.link/zumug2gc4uv3kmm" }
     ],
@@ -63,6 +241,7 @@ export const PROJECTS = Object.freeze([
     year: 2024,
     timelineOrder: 3,
     title: "Modular FLL Robot V2 (SUBMERGED)",
+    id: "fll-v2",
     categories: ["CAD", "Robotics"],
     competition: "FLL",
     summary: "The second iteration of my modular EV3 robot platform, redesigned for the 2024–2025 SUBMERGED FLL season.",
@@ -75,9 +254,9 @@ export const PROJECTS = Object.freeze([
     tags: ["BrickLink Studio", "FLL", "LEGO Technic", "EV3", "Modular Design"],
     galleryMode: "cad-contained",
     media: [
-      "assets/projects/modular_fll_robo_v2/bot2_from_above.png",
-      "assets/projects/modular_fll_robo_v2/robot1.png",
-      "assets/projects/modular_fll_robo_v2/robot2.png"
+      "assets/projects/modular_fll_robo_v2/bot2_from_above.webp",
+      "assets/projects/modular_fll_robo_v2/robot1.webp",
+      "assets/projects/modular_fll_robo_v2/robot2.webp"
     ],
     links: [
       { label: "Open interactive 3D viewer", href: "viewer.html?model=submerged", resourceType: "preview" },
@@ -90,6 +269,7 @@ export const PROJECTS = Object.freeze([
     year: 2025,
     timelineOrder: 1,
     title: "Optima",
+    id: "optima",
     categories: ["Software", "Marketing"],
     competition: "InfoEducație",
     summary: "An AI-powered mobile platform for planning outreach events, coordinating teams, and measuring real-world impact.",
@@ -100,9 +280,9 @@ export const PROJECTS = Object.freeze([
     tags: ["Flutter", "Dart", "Firebase", "Node.js", "AI", "Mobile"],
     galleryMode: "square-static",
     media: [
-      "assets/projects/optima/github-optima.png",
-      "assets/projects/optima/optima1.png",
-      "assets/projects/optima/optima2.png"
+      "assets/projects/optima/github-optima.webp",
+      "assets/projects/optima/optima1.webp",
+      "assets/projects/optima/optima2.webp"
     ],
     links: [
       { label: "GitHub repository", href: "https://github.com/adisimaimulte1/optima-outreach-app" },
@@ -118,6 +298,7 @@ export const PROJECTS = Object.freeze([
     year: 2024,
     timelineOrder: 2,
     title: "Modular FLL Robot V1 (MASTERPIECE)",
+    id: "fll-v1",
     categories: ["CAD", "Robotics"],
     competition: "FLL",
     summary: "My first modular FLL robot CAD, designed around the LEGO Mindstorms EV3 platform for the 2023–2024 MASTERPIECE season.",
@@ -129,9 +310,9 @@ export const PROJECTS = Object.freeze([
     tags: ["BrickLink Studio", "FLL", "LEGO Technic", "EV3", "Modular Design"],
     galleryMode: "cad-contained",
     media: [
-      "assets/projects/modular_fll_robot_v1/bot_from_above.png",
-      "assets/projects/modular_fll_robot_v1/robot1.png",
-      "assets/projects/modular_fll_robot_v1/robot2.png"
+      "assets/projects/modular_fll_robot_v1/bot_from_above.webp",
+      "assets/projects/modular_fll_robot_v1/robot1.webp",
+      "assets/projects/modular_fll_robot_v1/robot2.webp"
     ],
     links: [
       { label: "Open interactive 3D viewer", href: "viewer.html?model=masterpiece", resourceType: "preview" },
@@ -144,6 +325,7 @@ export const PROJECTS = Object.freeze([
     year: 2024,
     timelineOrder: 1,
     title: "Omega Core Team Identity & Robotics",
+    id: "omega-core",
     categories: ["Marketing", "Robotics"],
     competition: "FLL",
     summary: "A complete technical and visual identity built for Omega Core during the 2023–2024 MASTERPIECE season.",
@@ -155,9 +337,9 @@ export const PROJECTS = Object.freeze([
     tags: ["FLL", "Brand Identity", "Adobe Illustrator", "Canva", "Content Creation", "Robot Design"],
     galleryMode: "brand-static",
     media: [
-      "assets/projects/omega_core/logo_sticker.png",
-      "assets/projects/omega_core/sticker2.png",
-      "assets/projects/omega_core/sticker1.png"
+      "assets/projects/omega_core/logo_sticker.webp",
+      "assets/projects/omega_core/sticker2.webp",
+      "assets/projects/omega_core/sticker1.webp"
     ],
     links: [
       { label: "Omega Core YouTube", href: "https://www.youtube.com/@omegacoreFLL" },
@@ -170,6 +352,7 @@ export const PROJECTS = Object.freeze([
     year: 2024,
     timelineOrder: 4,
     title: "PythFinder",
+    id: "pythfinder",
     categories: ["Software", "Robotics"],
     competition: "InfoEducație",
     summary: "A Python motion-planning library and desktop trajectory generator designed to make FLL autonomous routines more precise and consistent.",
@@ -180,9 +363,9 @@ export const PROJECTS = Object.freeze([
     tags: ["Python", "Motion Planning", "Robotics", "FLL", "Trajectory Generation"],
     galleryMode: "natural-static",
     media: [
-      "assets/projects/pythfinder/pyth-finder-logo-ev3-quickstart.png",
-      "assets/projects/pythfinder/fll-preset.png",
-      "assets/projects/pythfinder/simulator-paint.png"
+      "assets/projects/pythfinder/pyth-finder-logo-ev3-quickstart.webp",
+      "assets/projects/pythfinder/fll-preset.webp",
+      "assets/projects/pythfinder/simulator-paint.webp"
     ],
     links: [
       { label: "GitHub repository", href: "https://github.com/omegacoreFLL/PythFinder" },

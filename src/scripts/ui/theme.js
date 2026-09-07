@@ -1,7 +1,6 @@
-import { MEDIA_QUERIES, STORAGE_KEYS, THEMES } from "../config/constants.js";
+import { STORAGE_KEYS, THEMES } from "../config/constants.js";
 
 const root = document.documentElement;
-const systemTheme = window.matchMedia(MEDIA_QUERIES.darkMode);
 let button;
 let previousTheme = THEMES.light;
 
@@ -11,12 +10,9 @@ export function initializeTheme(themeButton) {
   const savedPreviousTheme = localStorage.getItem(STORAGE_KEYS.previousTheme);
   if ([THEMES.light, THEMES.dark].includes(savedPreviousTheme)) previousTheme = savedPreviousTheme;
   else if ([THEMES.light, THEMES.dark].includes(savedTheme)) previousTheme = savedTheme;
-  setTheme(savedTheme || (systemTheme.matches ? THEMES.dark : THEMES.light));
+  setTheme(savedTheme || THEMES.light);
   button.addEventListener("click", () => toggleTheme(true));
   button.addEventListener("animationend", () => button.classList.remove("is-changing"));
-  systemTheme.addEventListener("change", ({ matches }) => {
-    if (!localStorage.getItem(STORAGE_KEYS.theme)) setTheme(matches ? THEMES.dark : THEMES.light);
-  });
 }
 
 export function toggleTheme(remember = true) {

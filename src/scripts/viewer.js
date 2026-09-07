@@ -7,14 +7,14 @@ const MODELS = Object.freeze({
   masterpiece: {
     title: "Modular FLL Robot V1 (MASTERPIECE)",
     source: "assets/projects/modular_fll_robot_v1/OMEGA_bot_2023-2024.dae",
-    poster: "assets/projects/modular_fll_robot_v1/robot2.png",
+    poster: "assets/projects/modular_fll_robot_v1/robot2.webp",
     rotation: [Math.PI / 2, 0, 0],
     yaw: Math.PI / 2
   },
   submerged: {
     title: "Modular FLL Robot V2 (SUBMERGED)",
     source: "assets/projects/modular_fll_robo_v2/bot_2024-2025.dae",
-    poster: "assets/projects/modular_fll_robo_v2/robot2.png",
+    poster: "assets/projects/modular_fll_robo_v2/robot2.webp",
     rotation: [Math.PI / 2, 0, 0]
   }
 });

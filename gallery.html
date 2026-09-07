@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Gallery · Adrian Contras</title>
+  <link rel="icon" type="image/png" href="assets/icons/site-icon.png">
+  <link rel="stylesheet" href="src/styles/gallery.css">
+  <script src="src/scripts/gallery.js" type="module"></script>
+</head>
+<body>
+  <main class="gallery-page">
+    <header class="viewer__header">
+      <div>
+        <p class="viewer__eyebrow">Full gallery of the project</p>
+        <h1 class="viewer__title" id="gallery-title">Gallery</h1>
+      </div>
+    </header>
+    <p id="gallery-status" role="status"></p>
+    <div id="gallery-grid"></div>
+  </main>
+  <dialog class="gallery-viewer" id="gallery-viewer" aria-label="Media viewer">
+    <div class="gallery-toolbar">
+      <button type="button" id="gallery-previous" aria-label="Previous item">← Previous</button>
+      <p id="gallery-counter" aria-live="polite"></p>
+      <button type="button" id="gallery-next" aria-label="Next item">Next →</button>
+      <button type="button" id="gallery-close">Close</button>
+    </div>
+    <div class="gallery-stage" id="gallery-stage"></div>
+    <a id="gallery-original" target="_blank" rel="noreferrer">Open image / video ↗</a>
+  </dialog>
+</body>
+</html>

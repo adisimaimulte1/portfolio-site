@@ -2,7 +2,7 @@
 
 <img src="assets/icons/site-icon.png" width="112" alt="Adrian Contraș portfolio icon">
 
-# Adrian Contraș — Interactive Terminal Portfolio
+# Interactive Terminal Portfolio
 
 ### My work, presented one command at a time.
 
@@ -48,6 +48,20 @@ Projects and awards can be filtered by year, category, competition and keywords.
 
 ## Commands
 
+### Project galleries
+
+Gallery buttons and media are indexed from `assets/projects/<project-folder>/gallery/`. A folder enables the button even when it contains no media; removing the folder disables it. Only photos and videos inside that folder are included, never the card previews.
+
+After adding/removing gallery folders or media, run from the repository root:
+
+```powershell
+python scripts/update-galleries.py
+```
+
+Commit the generated `src/scripts/data/galleries.js` with your assets. This small indexing script needs only Python's standard library; the website remains static vanilla HTML/CSS/JavaScript. Empty galleries contain a `.gitkeep` so Git preserves the folder; it is not displayed. Supported files: PNG, JPG/JPEG, WebP, GIF, AVIF, SVG, MP4, WebM, and OGV. Numbered subfolders become sections: `1_app_features`, `2_at_competition`, `10_early_development`. Sections and files use natural numeric order (2 before 10); section headings omit the number and turn underscores/hyphens into spaces. Media directly inside `gallery` appears first without a heading. Empty sections stay hidden. Photos and videos share rows sized to fit the available screen width at their original aspect ratios. Phone galleries use compact thumbnails; select any photo or video to open the larger viewer.
+
+### Terminal commands
+
 ```text
 help
 about
@@ -87,3 +101,26 @@ Depending on the project, its entry may include $\color{#F56600}{\textsf{source 
 Designed and built by [Adrian Contraș](https://github.com/adisimaimulte1).
 
 </div>
+
+### Production media workflow
+
+Keep camera originals outside this repository. Project images are production WebP files with a maximum edge of 1920 px (quality 82 for photos, 86 for screenshots/artwork). EXIF orientation and sRGB color conversion are applied before metadata is removed. Responsive 320/640/960 px WebP thumbnails serve cards and galleries; larger viewer sizes reuse the production image. The viewer's open-file link opens this optimized asset.
+
+To import new JPG/PNG images or MP4 videos, install `Pillow` and `imageio-ffmpeg`, then run:
+
+```powershell
+python scripts/optimize-media.py images
+python scripts/optimize-media.py videos
+python scripts/update-previews.py --prune
+python scripts/update-video-previews.py
+python scripts/update-galleries.py
+python scripts/check-media.py
+```
+
+The optimizer replaces originals after validating each output. Image conversion changes extensions to `.webp` and updates explicit HTML/JavaScript/CSS asset references. The gallery index regenerates gallery paths automatically. Video optimization is resumable using ignored `.cache/media-optimization/` records. Retain that cache to avoid re-encoding existing clips on subsequent imports.
+
+Local videos retain their full duration, using H.264/AAC MP4 with fast-start playback, up to 960 px maximum edge, 24 fps, CRF 32, a 550 kb/s video ceiling (lower for long clips), and 48 kb/s mono audio. This intentionally trades video detail for a small repository. No clip should exceed 25 MiB. Prefer a direct external video link when an identical online version is known; retain the project's existing timestamped YouTube match links. Never replace a local clip with an unrelated channel or playlist.
+
+Video tiles use small WebP posters; scrolling does not load video streams. Only the open viewer creates a player, and closing or navigating unloads it. Image loading remains responsive and deferred until near the viewport.
+
+Before committing, run `python scripts/check-media.py`; before pushing, run `python scripts/check-media.py --history`. These validate local media references and budgets: 1 MiB per raster image, 25 MiB per video, 50 MiB per other asset, 750 MiB total assets, and 950 MiB of unique uncompressed Git blobs. GitHub blocks individual Git files over 100 MiB and pushes over 2 GB. CI runs the same checks. Do not commit `.cache/`, original-media backup folders, or camera RAW/MOV files. Deleting a committed original is insufficient: its old blob must also be removed from history.

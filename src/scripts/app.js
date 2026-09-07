@@ -1,6 +1,6 @@
 import { AUTO_SCROLL, COMMAND_HISTORY_LIMIT, SELECTORS } from "./config/constants.js";
 import { loadCommandHistory, saveCommandHistory } from "./storage/history.js";
-import { clearEntries, clearTerminalClearedState, loadEntries, loadScrollPosition, markTerminalCleared, saveEntries, saveScrollPosition, wasTerminalCleared } from "./storage/session.js";
+import { clearEntries, clearTerminalClearedState, loadEntries, loadScrollPosition, markTerminalCleared, saveEntries, saveScrollPosition } from "./storage/session.js";
 import { resolveCommand } from "./terminal/commands.js";
 import { createCommandEntry } from "./ui/renderers.js";
 import { prepareReveal } from "./ui/reveal.js";
@@ -41,6 +41,7 @@ elements.form.addEventListener("submit", async (event) => {
 
   elements.hint.hidden = true;
   elements.input.value = "";
+  resizeCommandInput();
   commandHistory.push(command);
   commandHistory.splice(0, Math.max(0, commandHistory.length - COMMAND_HISTORY_LIMIT));
   saveCommandHistory(commandHistory);
@@ -72,20 +73,65 @@ elements.form.addEventListener("submit", async (event) => {
 });
 
 elements.input.addEventListener("keydown", (event) => {
+  if (event.isComposing) return;
+  if (event.key === "Enter") {
+    event.preventDefault();
+    elements.form.requestSubmit();
+    return;
+  }
   if (event.key !== "ArrowUp" && event.key !== "ArrowDown") return;
   event.preventDefault();
   historyPosition += event.key === "ArrowUp" ? -1 : 1;
   historyPosition = Math.max(0, Math.min(commandHistory.length, historyPosition));
   elements.input.value = commandHistory[historyPosition] || "";
-  requestAnimationFrame(() => elements.input.setSelectionRange(elements.input.value.length, elements.input.value.length));
+  requestAnimationFrame(moveCommandCaretToEnd);
 });
+
+elements.input.addEventListener("beforeinput", (event) => {
+  if (!event.isComposing && ["insertParagraph", "insertLineBreak"].includes(event.inputType)) {
+    event.preventDefault();
+    elements.form.requestSubmit();
+  }
+});
+
+elements.input.addEventListener("paste", (event) => {
+  event.preventDefault();
+  const text = event.clipboardData.getData("text/plain").replace(/[\r\n]+/g, " ");
+  elements.input.setRangeText(text, elements.input.selectionStart, elements.input.selectionEnd, "end");
+  resizeCommandInput();
+});
+
+elements.input.addEventListener("drop", (event) => event.preventDefault());
+
+function moveCommandCaretToEnd() {
+  elements.input.setSelectionRange(elements.input.value.length, elements.input.value.length);
+  resizeCommandInput();
+}
+
+function resizeCommandInput() {
+  // Indent only the first line; wrapped lines use the full terminal width.
+  const promptWidth = elements.form.querySelector(".prompt").getBoundingClientRect().width;
+  elements.input.style.setProperty("--prompt-width", `${promptWidth}px`);
+  elements.input.style.height = "0px";
+  elements.input.style.height = `${elements.input.scrollHeight}px`;
+}
+
+elements.input.addEventListener("input", resizeCommandInput);
+// Reflow pasted/recalled commands and existing text when the viewport changes.
+let commandInputWidth = 0;
+const commandInputObserver = new ResizeObserver(([entry]) => {
+  if (entry.contentRect.width === commandInputWidth) return;
+  commandInputWidth = entry.contentRect.width;
+  resizeCommandInput();
+});
+commandInputObserver.observe(elements.input, { box: "content-box" });
 
 elements.history.addEventListener("click", (event) => {
   const button = event.target.closest("[data-command]");
   if (!button || elements.form.hidden) return;
   elements.input.value = button.dataset.command;
   elements.input.focus({ preventScroll: true });
-  elements.input.setSelectionRange(elements.input.value.length, elements.input.value.length);
+  moveCommandCaretToEnd();
 });
 
 elements.terminal.addEventListener("click", (event) => {
@@ -94,17 +140,8 @@ elements.terminal.addEventListener("click", (event) => {
 
 async function initializeTerminal() {
   if (!entries.length) {
-    if (wasTerminalCleared()) {
-      elements.hint.hidden = false;
-      showPrompt(false);
-      return;
-    }
-    const initialCommand = getShellCommand(currentShell, "help");
-    const initialHelp = { command: initialCommand, startedAt: Date.now(), automatic: true, shell: currentShell };
-    entries.push(initialHelp);
-    saveEntries(entries);
-    const { html } = resolveCommand(initialCommand, { isReplay: true, shell: currentShell });
-    await renderEntry(initialHelp, html);
+    elements.hint.hidden = false;
+    showPrompt(false);
     return;
   }
 
@@ -139,6 +176,7 @@ function hidePrompt() {
 
 function showPrompt(center) {
   elements.form.hidden = false;
+  resizeCommandInput();
   elements.input.focus({ preventScroll: true });
   if (center) elements.form.scrollIntoView({ behavior: "smooth", block: "center" });
 }

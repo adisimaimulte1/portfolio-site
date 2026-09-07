@@ -15,7 +15,8 @@ const OPTIONS = Object.freeze({
     { flag: "--latest", alias: "-l", description: "Show projects from the current year" },
     { flag: "--year", alias: "-y", description: "Filter by year" },
     { flag: "--category", alias: "-t", description: "Filter by CAD, Software, Marketing, or Robotics" },
-    { flag: "--competition", alias: "-c", description: "Filter by FTC, FLL, or InfoEducație" }
+    { flag: "--competition", alias: "-c", description: "Filter by FTC, FLL, or InfoEducație" },
+    { flag: "--search", alias: "-s", description: "Search project names, descriptions, and tags" }
   ],
   awards: [
     { flag: "--all", alias: "-a", description: "Show every award" },
@@ -116,6 +117,14 @@ function resolvePortfolio(items, label, option, values) {
 
 function resolveProjects(option, values) {
   if (["--all", "-a"].includes(option)) return createProjectsOutput(PROJECTS);
+  if (["--search", "-s"].includes(option)) {
+    const query = normalizeSearch(values.join(" "));
+    if (!query) return createOptionError(`projects ${option}`, "Add a search term after the option.");
+    const matches = PROJECTS.filter((project) => normalizeSearch([
+      project.title, project.summary, ...project.details, ...project.tags, ...project.categories, project.competition
+    ].join(" ")).includes(query));
+    return createProjectsOutput(matches);
+  }
   if (["--latest", "-l"].includes(option)) {
     const currentYear = new Date().getFullYear();
     return createProjectsOutput(PROJECTS.filter(({ year }) => year === currentYear), `projects from ${currentYear}`);

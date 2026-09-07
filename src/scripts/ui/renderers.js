@@ -1,4 +1,6 @@
+import { PREVIEWS } from "../data/previews.js";
 import { getPromptHtml } from "../terminal/shells.js";
+import { getProjectGallery } from "../data/galleries.js";
 
 const CAD_RESOURCE_ORDER = Object.freeze({ preview: 0, instructions: 1, download: 2 });
 
@@ -103,7 +105,10 @@ export function createProjectsOutput(projects, label = "projects") {
     <article class="project-card">
       <header class="project-card__header">
         <div><p class="project-card__meta">${project.year} · ${project.competition} · ${project.categories.join(" · ")}</p><h2 class="project-card__title">${project.title}</h2></div>
-        <span class="project-card__status">Project</span>
+        <div class="project-card__badges">
+          ${getProjectGallery(project) ? `<a class="project-card__status project-card__gallery-button" href="gallery.html?project=${encodeURIComponent(project.id)}" target="_blank" rel="noreferrer">Gallery ↗</a>` : ""}
+          <span class="project-card__status">Project</span>
+        </div>
       </header>
       <p class="project-card__summary">${project.summary}</p>
       <ul class="project-card__details">${project.details.map((detail) => `<li>${detail}</li>`).join("")}</ul>
@@ -113,7 +118,7 @@ export function createProjectsOutput(projects, label = "projects") {
         <p>${project.campaign.summary}</p>
         <ul>${project.campaign.details.map((detail) => `<li>${detail}</li>`).join("")}</ul>
       </aside>` : ""}
-      ${project.media.length ? `<div class="project-gallery project-gallery--${project.galleryMode || "square-static"}${project.galleryModifier ? ` project-gallery--${project.galleryModifier}` : ""}">${project.media.map((source, index) => `<a href="${source}" target="_blank" rel="noreferrer"><img src="${source}" alt="${project.title} project image ${index + 1}" loading="lazy"></a>`).join("")}</div>` : ""}
+      ${project.media.length ? `<div class="project-gallery project-gallery--${project.galleryMode || "square-static"}${project.galleryModifier ? ` project-gallery--${project.galleryModifier}` : ""}">${project.media.map((source, index) => `<a href="${source}" target="_blank" rel="noreferrer"><img src="${PREVIEWS[source]?.src || source}" alt="${project.title} project image ${index + 1}" loading="lazy" decoding="async"></a>`).join("")}</div>` : ""}
       <div class="project-card__footer">
         <ul class="project-tags">${project.tags.map((tag) => `<li>${tag}</li>`).join("")}</ul>
         ${createProjectResources(project)}

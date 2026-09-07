@@ -12,7 +12,6 @@ export const THEMES = Object.freeze({ light: "light", dark: "dark", strawberry: 
 export const SHELLS = Object.freeze({ powershell: "powershell", linux: "linux" });
 export const STORAGE_KEYS = Object.freeze({ theme: "theme", previousTheme: "previousAccentTheme", shell: "terminalShell", terminalEntries: "terminalEntries", scrollPosition: "terminalScrollPosition", commandHistory: "terminalCommandHistory", terminalCleared: "terminalCleared" });
 export const COMMAND_HISTORY_LIMIT = 10;
-export const MEDIA_QUERIES = Object.freeze({ darkMode: "(prefers-color-scheme: dark)" });
 export const REVEAL = Object.freeze({ duration: 320, stagger: 75 });
 export const AUTO_SCROLL = Object.freeze({
   viewportMargin: 32,
