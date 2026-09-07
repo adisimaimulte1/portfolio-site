@@ -48,20 +48,6 @@ Projects and awards can be filtered by year, category, competition and keywords.
 
 ## Commands
 
-### Project galleries
-
-Gallery buttons and media are indexed from `assets/projects/<project-folder>/gallery/`. A folder enables the button even when it contains no media; removing the folder disables it. Only photos and videos inside that folder are included, never the card previews.
-
-After adding/removing gallery folders or media, run from the repository root:
-
-```powershell
-python scripts/update-galleries.py
-```
-
-Commit the generated `src/scripts/data/galleries.js` with your assets. This small indexing script needs only Python's standard library; the website remains static vanilla HTML/CSS/JavaScript. Empty galleries contain a `.gitkeep` so Git preserves the folder; it is not displayed. Supported files: PNG, JPG/JPEG, WebP, GIF, AVIF, SVG, MP4, WebM, and OGV. Numbered subfolders become sections: `1_app_features`, `2_at_competition`, `10_early_development`. Sections and files use natural numeric order (2 before 10); section headings omit the number and turn underscores/hyphens into spaces. Media directly inside `gallery` appears first without a heading. Empty sections stay hidden. Photos and videos share rows sized to fit the available screen width at their original aspect ratios. Phone galleries use compact thumbnails; select any photo or video to open the larger viewer.
-
-### Terminal commands
-
 ```text
 help
 about
@@ -88,7 +74,7 @@ Use `↑` and `↓` to navigate recent commands.
 
 ## The work
 
-The portfolio contains $\color{#F56600}{\textsf{fully developed and documented projects}}$ from different parts of my journey: applications created for InfoEducație that went on to win national awards, robotics systems designed for FTC teams and other side projects I built simply because I thought they would be cool.
+The portfolio contains $\color{#F56600}{\textsf{fully developed and documented projects}}$ from different parts of my journey: applications created for InfoEducație that went on to win national awards, robotics systems designed for FTC teams and other side projects I built simply because I thought they would be cool or useful.
 
 Depending on the project, its entry may include $\color{#F56600}{\textsf{source code}}$, $\color{#F56600}{\textsf{documentation}}$, $\color{#F56600}{\textsf{presentations}}$, $\color{#F56600}{\textsf{videos}}$, $\color{#F56600}{\textsf{CAD files}}$, screenshots and downloadable resources.
 
