@@ -22,6 +22,7 @@ dist/
 build/
 coverage/
 .cache/
+__pycache__/
 originals/
 media-originals/
 *.MOV

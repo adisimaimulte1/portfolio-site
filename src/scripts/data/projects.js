@@ -1,7 +1,7 @@
 export const PROJECTS = Object.freeze([
   {
     year: 2025,
-    timelineOrder: 2,
+    timelineOrder: 3,
     title: "Sideswipe V2",
     id: "sideswipe-v2",
     categories: ["Robotics", "CAD"],
@@ -23,6 +23,33 @@ export const PROJECTS = Object.freeze([
     ],
     links: [
       { label: "View Fusion 360 CAD", href: "https://a360.co/4A1exk2", resourceType: "preview" },
+      { label: "Engineering documentation", href: "https://canva.link/r0n7cg3halsxqgx" }
+    ]
+  },
+  {
+    year: 2025,
+    timelineOrder: 2,
+    title: "Sideswipe V1",
+    id: "sideswipe-v1",
+    categories: ["Robotics", "CAD"],
+    competition: "FTC",
+    summary: "The first complete DECODE robot concept, integrating drivetrain, intake, sorting, shooter, and endgame while exploring the packaging and mechanisms that shaped V2.",
+    details: [
+      "First full-system prototype; 3-slot spindexer; single-flywheel turret shooter; swerve conversion during development.",
+      "Started with mecanum, then switched to swerve for better positioning and packaging.",
+      "3-position rotating spindexer with passive artifact retention, feeding a turreted single-flywheel shooter with an adjustable hood.",
+      "Interlocking plate chassis for rigidity and a compact over-center tilting endgame.",
+      "Exposed the issues that drove V2: weight, intake geometry, spindexer reliability, shooter recovery, and tight extension margins."
+    ],
+    tags: ["Fusion 360", "FTC", "CAD", "Swerve", "Turret", "Flywheel", "Spindexer"],
+    galleryMode: "cad",
+    media: [
+      "assets/projects/sideswipe_v1/Sideswipe_v1_1.webp",
+      "assets/projects/sideswipe_v1/Sideswipe_v1_2.webp",
+      "assets/projects/sideswipe_v1/Sideswipe_v1_3.webp"
+    ],
+    links: [
+      { label: "View Fusion 360 CAD", href: "https://a360.co/4ximGOP", resourceType: "preview" },
       { label: "Engineering documentation", href: "https://canva.link/r0n7cg3halsxqgx" }
     ]
   },
@@ -143,6 +170,7 @@ export const PROJECTS = Object.freeze([
     links: [
       { label: "View Fusion 360 CAD", href: "https://a360.co/3T76xgV", resourceType: "preview" },
       { label: "Robot code", href: "https://github.com/exorosFTC/DeCodE" },
+      { label: "Additional robot videos", href: "https://drive.google.com/drive/folders/10rgvOno3l9h5e3mtl9LrjW9pQ8JZAG3V?usp=drive_link" },
       { label: "League meets early robot matches", href: "https://www.youtube.com/playlist?list=PLtbQ-qkLkCe2lX5gubuAySoLrI9SkwYoT" },
       { label: "Engineering documentation", href: "https://canva.link/r0n7cg3halsxqgx" }
     ]
@@ -376,6 +404,134 @@ export const PROJECTS = Object.freeze([
     archives: [
       { label: "Illustrator source files", href: "assets/projects/pythfinder/illustrator.zip" },
       { label: "Premiere source files", href: "https://drive.google.com/file/d/1NqlpOgZPRCuhyGQhlI6MWEbZJ43AoWdO/view?usp=drive_link", download: false }
+    ]
+  },
+  {
+    year: 2024,
+    timelineOrder: 5,
+    title: "CENTERSTAGE Off-Season Robot",
+    id: "centerstage-off-season",
+    categories: ["Robotics", "CAD"],
+    competition: "FTC",
+    summary: "My first fully custom CAD-designed FTC robot, bringing separate intake and outtake mechanisms together as an early step in my mechanical-design progression.",
+    details: [
+      "Custom mecanum chassis with separate extended intake and outtake systems using cascade-strung linear slides.",
+      "Surgical-tubing active intake and a bucket/hopper for collecting and transferring pixels.",
+      "Differential outtake claw with 3 degrees of freedom, able to score both pixels together or release one independently."
+    ],
+    tags: ["Fusion 360", "FTC", "CAD", "Mecanum", "Cascade Slides", "Active Intake", "Differential Claw"],
+    galleryMode: "cad",
+    media: [
+      "assets/projects/cs_off_season_robot/CS_Off_Season_Robot_1.webp",
+      "assets/projects/cs_off_season_robot/CS_Off_Season_Robot_2.webp",
+      "assets/projects/cs_off_season_robot/CS_Off_Season_Robot_3.webp"
+    ],
+    links: [
+      { label: "View Fusion 360 CAD", href: "https://a360.co/4xGIpRf", resourceType: "preview" }
+    ]
+  },
+  {
+    year: 2024,
+    timelineOrder: 6,
+    title: "Phronima V1",
+    id: "phronima-v1",
+    categories: ["Robotics", "CAD"],
+    competition: "FTC",
+    summary: "An experimental INTO THE DEEP prototype whose bulky, impractical layout established the initial architecture and exposed the packaging problems that drove the compact V2 redesign.",
+    details: [
+      "Custom mecanum drivetrain with separate horizontal collection and vertical scoring systems built around cascade slides.",
+      "Large active intake and a proposed Level 3 hang using the slides made the overall packaging excessively bulky.",
+      "Insufficient horizontal-extension space and mechanically impractical mechanisms prevented a viable competition design; V1 served as a learning prototype."
+    ],
+    tags: ["Fusion 360", "FTC", "CAD", "Mecanum", "Cascade Slides", "Active Intake", "Prototyping"],
+    galleryMode: "cad",
+    media: [
+      "assets/projects/phronima_v1/Phronima_v1_1.webp",
+      "assets/projects/phronima_v1/Phronima_v1_2.webp",
+      "assets/projects/phronima_v1/Phronima_v1_3.webp"
+    ],
+    links: [
+      { label: "View Fusion 360 CAD", href: "https://a360.co/4iUA7AE", resourceType: "preview" },
+      { label: "Engineering documentation", href: "https://canva.link/ayu0juh0vgdt6rc" }
+    ]
+  },
+  {
+    year: 2025,
+    timelineOrder: -2,
+    title: "Phronima V2",
+    id: "phronima-v2",
+    categories: ["Robotics", "CAD"],
+    competition: "FTC",
+    summary: "A compact, functional redesign of the oversized V1 prototype, marking a major step forward in packaging, manufacturing, and mechanical understanding while revealing the next design challenges.",
+    details: [
+      "Chassis reduced from approximately 44.2 × 29.5 cm to 29.6 × 29 cm, with motors low in the frame and accessible, compact electronics packaging.",
+      "Claw-based intake replaced the bulky active intake; separate horizontal collection and vertical scoring remained, while the impractical hanging concept was abandoned.",
+      "Iterated claws, pulleys, and structures alongside a custom 3D-printed electronics enclosure; tested PLA, PET-CF, resin, steel, and aluminum.",
+      "The team CNC-machined and painted structural aluminum parts; limitations of claw-based collection motivated the later return to an active intake."
+    ],
+    tags: ["Fusion 360", "FTC", "CAD", "Mecanum", "Claw Intake", "CNC Machining", "Packaging"],
+    galleryMode: "cad",
+    media: [
+      "assets/projects/phronima_v2/Phronima_v2_1.webp",
+      "assets/projects/phronima_v2/Phronima_v2_2.webp",
+      "assets/projects/phronima_v2/Phronima_v2_3.webp"
+    ],
+    links: [
+      { label: "View Fusion 360 CAD", href: "https://a360.co/4yjHLcg", resourceType: "preview" },
+      { label: "Engineering documentation", href: "https://canva.link/ayu0juh0vgdt6rc" },
+      { label: "Additional robot videos", href: "https://drive.google.com/drive/folders/1_j4S0f_GEmfhle8Bs9suRG_gnoX0EO21?usp=sharing" }
+    ]
+  },
+  {
+    year: 2025,
+    timelineOrder: -1,
+    title: "Phronima V3",
+    id: "phronima-v3",
+    categories: ["Robotics", "CAD"],
+    competition: "FTC",
+    summary: "A CAD-only design study between V2 and V4, exploring a faster active intake and more compact mechanisms. This version was never physically built or competition-tested.",
+    details: [
+      "Reconsidered V2’s claw-based collection in favor of an active intake, exploring a rotating/turreted assembly for a wider collection range.",
+      "Developed a compact coaxial transmission concept to keep the drive motor off the moving intake and reduce moving mass.",
+      "Explored bearings and low-friction plexiglass guides while simplifying mechanisms and packaging; these CAD concepts informed the final V4."
+    ],
+    tags: ["Fusion 360", "FTC", "CAD", "Design Study", "Active Intake", "Coaxial Transmission", "Turret"],
+    galleryMode: "cad",
+    media: [
+      "assets/projects/phronima_v3/Phronima_v3_1.webp",
+      "assets/projects/phronima_v3/Phronima_v3_2.webp",
+      "assets/projects/phronima_v3/Phronima_v3_3.webp"
+    ],
+    links: [
+      { label: "View Fusion 360 CAD", href: "https://a360.co/3TexC1M", resourceType: "preview" },
+      { label: "Engineering documentation", href: "https://canva.link/ayu0juh0vgdt6rc" }
+    ]
+  },
+  {
+    year: 2025,
+    timelineOrder: 0,
+    title: "Phronima V4 / Modesty",
+    id: "phronima-v4",
+    categories: ["Robotics", "CAD"],
+    competition: "FTC",
+    summary: "The final, mature INTO THE DEEP competition robot, combining lessons from V1–V3 into a simpler, more rigid and maintainable design with reliable active collection.",
+    details: [
+      "Aluminum hybrid active-claw intake with upper rollers, single-planetary-servo vertical motion, and a small servo retaining the game element for controlled positioning.",
+      "Analytically checked intake torque: approximately 0.88 Nm required, with several times that available; bearings and plexiglass guides supported smooth transfers.",
+      "Compact coaxial transmission kept motor mass off the moving intake; reducing the arm from roughly 5 degrees of freedom to 3 improved rigidity and reliability.",
+      "Pocketed 3 mm EN AW-6082 aluminum structure, robust locknut/washer joints, centrally positioned mass, and low-mounted motors balanced stability, cooling, and serviceability."
+    ],
+    tags: ["Fusion 360", "FTC", "CAD", "Active Intake", "Coaxial Transmission", "EN AW-6082", "Mechanical Design"],
+    galleryMode: "cad",
+    media: [
+      "assets/projects/phronima_v4_slash_modesty/Phronima_v4_1.webp",
+      "assets/projects/phronima_v4_slash_modesty/Phronima_v4_2.webp",
+      "assets/projects/phronima_v4_slash_modesty/Phronima_v4_3.webp"
+    ],
+    links: [
+      { label: "View Fusion 360 CAD", href: "https://a360.co/4qXN5zA", resourceType: "preview" },
+      { label: "Engineering documentation", href: "https://canva.link/ayu0juh0vgdt6rc" },
+      { label: "Additional robot videos", href: "https://drive.google.com/drive/folders/1_j4S0f_GEmfhle8Bs9suRG_gnoX0EO21?usp=sharing" }
     ]
   }
 ]);

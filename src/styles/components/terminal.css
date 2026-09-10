@@ -25,7 +25,8 @@
 .output-copy p:last-child { margin-bottom:0; }
 .about-greeting { margin:0 0 28px; color:var(--color-text); font-size:clamp(2.8rem,8vw,6.5rem); line-height:.95; letter-spacing:-.06em; }
 .command-list { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:2px 30px; max-width:780px; margin:clamp(16px,2.3vw,24px) 0 0; padding:0; list-style:none; }
-.command-button { display:grid; grid-template-columns:minmax(90px,130px) minmax(0,1fr); gap:16px; width:100%; padding:12px 0; color:var(--color-text); background:none; border:0; border-bottom:1px solid var(--color-border); text-align:left; cursor:pointer; }
+.command-button { display:grid; grid-template-columns:minmax(90px,130px) minmax(0,1fr); align-items:center; gap:16px; width:100%; padding:12px 0; color:var(--color-text); background:none; border:0; border-bottom:1px solid var(--color-border); text-align:left; cursor:pointer; }
+.command-list > li:nth-child(-n+2) .command-button { border-top:1px solid var(--color-border); }
 .command-button__name { color:var(--color-accent); font-weight:700; } .command-button__description { color:var(--color-muted); }
 .command-button:hover .command-button__name,.command-button:focus-visible .command-button__name { text-decoration:underline; text-underline-offset:4px; }
 .command-button:focus-visible { outline:2px solid var(--color-accent); outline-offset:3px; }
@@ -40,7 +41,7 @@
 @keyframes terminal-reveal { from { opacity:0; transform:translateY(7px); filter:blur(2px); } to { opacity:1; transform:none; filter:none; } }
 @keyframes section-line-reveal { from { border-color:transparent; } to { border-color:var(--color-text); } }
 @keyframes output-rail-reveal { from { opacity:0; transform:scaleY(0); } to { opacity:1; transform:scaleY(1); } }
-@media (max-width:700px) { .terminal { width:min(100% - 24px,1040px); padding-top:32px; } .command-list,.hobby-list { grid-template-columns:1fr; } }
+@media (max-width:700px) { .terminal { width:min(100% - 24px,1040px); padding-top:32px; } .command-list,.hobby-list { grid-template-columns:1fr; } .command-list > li:nth-child(2) .command-button { border-top:0; } }
 @media (max-width:600px) {
   .terminal__form { font-size:16px; min-height:44px; }
   .command-button { grid-template-columns:minmax(80px,.8fr) minmax(0,1fr); gap:12px; }

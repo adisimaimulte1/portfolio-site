@@ -29,7 +29,7 @@ export function saveShell(shell) {
 
 export function getPromptHtml(shell) {
   return shell === SHELLS.linux
-    ? `<span class="prompt"><span class="prompt__part">adrian@portfolio</span><span class="prompt__shell">:~$</span></span>`
+    ? `<span class="prompt"><span class="prompt__part">adrian</span><span class="prompt__shell">@</span><span class="prompt__part">portfolio</span><span class="prompt__shell">:~$</span></span>`
     : `<span class="prompt"><span class="prompt__shell">PS C:\\</span><span class="prompt__part">Users</span><span class="prompt__shell">\\</span><span class="prompt__part">Adrian</span><span class="prompt__shell">\\</span><span class="prompt__part">Portfolio</span><span class="prompt__shell">&gt;</span></span>`;
 }
 

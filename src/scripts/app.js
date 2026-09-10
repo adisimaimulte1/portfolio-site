@@ -39,7 +39,6 @@ elements.form.addEventListener("submit", async (event) => {
   const command = elements.input.value.trim();
   if (!command || elements.form.hidden) return;
 
-  elements.hint.hidden = true;
   elements.input.value = "";
   resizeCommandInput();
   commandHistory.push(command);
@@ -53,13 +52,14 @@ elements.form.addEventListener("submit", async (event) => {
     entries.length = 0;
     historyPosition = commandHistory.length;
     elements.history.replaceChildren();
-    revealHint();
+    if (elements.hint.hidden) revealHint();
     clearEntries();
     markTerminalCleared();
     showPrompt(false);
     return;
   }
 
+  elements.hint.hidden = true;
   const entryRecord = { command, startedAt: Date.now(), shell: executionShell };
   if (result.nextShell) {
     currentShell = result.nextShell;
