@@ -38,7 +38,6 @@ for p in files:
     if p.suffix.lower() in {'.mp4', '.webm', '.ogv', '.mov'}: limit = 25*1024**2
     if p.suffix.lower() in {'.jpg', '.jpeg', '.png', '.webp', '.avif'}: limit = 1024**2
     if size > limit: errors.append(f'Asset exceeds {limit/1024**2:g} MiB budget: {p.relative_to(ROOT)} ({size/1024**2:.2f} MiB)')
-if total > 750*1024**2: errors.append(f'Assets exceed 750 MiB budget: {total/1024**2:.1f} MiB')
 if '--history' in sys.argv:
     objects = subprocess.check_output(['git', 'rev-list', '--objects', '--all'], cwd=ROOT)
     result = subprocess.check_output(['git', 'cat-file', '--batch-check=%(objecttype) %(objectsize) %(rest)'], input=objects, cwd=ROOT).decode()

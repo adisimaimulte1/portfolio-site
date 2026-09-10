@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Award Documents · Adrian Contras</title>
+  <link rel="icon" type="image/png" href="assets/icons/site-icon.png">
+  <link rel="stylesheet" href="src/styles/award.css">
+  <script src="src/scripts/award.js" type="module"></script>
+</head>
+<body>
+  <main class="award-page">
+    <header class="viewer__header">
+      <div>
+        <p class="viewer__eyebrow" id="award-eyebrow">Award documents</p>
+        <h1 class="viewer__title" id="award-title">Diplomas</h1>
+        <p class="award-subtitle" id="award-subtitle"></p>
+      </div>
+    </header>
+
+    <p id="award-status" role="status"></p>
+    <div class="award-grid" id="award-grid"></div>
+  </main>
+
+  <dialog class="award-viewer" id="award-viewer" aria-label="Diploma viewer">
+    <div class="award-toolbar">
+      <button type="button" id="award-previous" aria-label="Previous document">← Previous</button>
+      <p id="award-counter" aria-live="polite"></p>
+      <button type="button" id="award-next" aria-label="Next document">Next →</button>
+      <button type="button" id="award-close">Close</button>
+    </div>
+    <div class="award-stage" id="award-stage"></div>
+    <a id="award-original" target="_blank" rel="noreferrer">Open original ↗</a>
+  </dialog>
+</body>
+</html>
