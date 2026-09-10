@@ -1,8 +1,9 @@
 * { box-sizing:border-box; }
 html { min-height:100%; scroll-behavior:smooth; }
-body { min-height:100vh; margin:0; color:var(--color-text); background:var(--color-background); font-family:var(--font-code); transition:color var(--transition-theme),background-color var(--transition-theme); }
+body { min-height:100vh; min-height:100dvh; margin:0; color:var(--color-text); background:var(--color-background); font-family:var(--font-code); transition:color var(--transition-theme),background-color var(--transition-theme); }
 button,input { font:inherit; }
 button,[role="button"],a[class*="button"] { transform-origin:center center; }
+a,button,input,textarea,select,[role="button"] { -webkit-tap-highlight-color:transparent; }
 .accent,.prompt__part { color:var(--color-accent); }
 .accent-orange { color:#d65a00; }
 .accent-purple { color:#7b5ac6; }

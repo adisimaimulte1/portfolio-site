@@ -22,6 +22,8 @@ const restoredScrollPosition = loadScrollPosition();
 const commandHistory = loadCommandHistory();
 let historyPosition = commandHistory.length;
 let currentShell = loadShell();
+const usesTouchKeyboard = window.matchMedia("(hover: none) and (pointer: coarse)");
+usesTouchKeyboard.addEventListener("change", updateIdleCaret);
 
 initializeTheme(elements.themeButton);
 updatePrompt();
@@ -56,6 +58,7 @@ elements.form.addEventListener("submit", async (event) => {
     clearEntries();
     markTerminalCleared();
     showPrompt(false);
+    resetTerminalViewport();
     return;
   }
 
@@ -111,12 +114,23 @@ function moveCommandCaretToEnd() {
 function resizeCommandInput() {
   // Indent only the first line; wrapped lines use the full terminal width.
   const promptWidth = elements.form.querySelector(".prompt").getBoundingClientRect().width;
+  elements.form.style.setProperty("--prompt-width", `${promptWidth}px`);
   elements.input.style.setProperty("--prompt-width", `${promptWidth}px`);
   elements.input.style.height = "0px";
   elements.input.style.height = `${elements.input.scrollHeight}px`;
 }
 
 elements.input.addEventListener("input", resizeCommandInput);
+elements.input.addEventListener("input", updateIdleCaret);
+elements.input.addEventListener("focus", updateIdleCaret);
+elements.input.addEventListener("blur", updateIdleCaret);
+
+function updateIdleCaret() {
+  elements.form.classList.toggle(
+    "terminal__form--idle-caret",
+    usesTouchKeyboard.matches && !elements.input.value && document.activeElement !== elements.input
+  );
+}
 // Reflow pasted/recalled commands and existing text when the viewport changes.
 let commandInputWidth = 0;
 const commandInputObserver = new ResizeObserver(([entry]) => {
@@ -171,14 +185,35 @@ async function renderEntry(entryRecord, html, options = {}) {
 }
 
 function hidePrompt() {
+  if (usesTouchKeyboard.matches && document.activeElement === elements.input) elements.input.blur();
   elements.form.hidden = true;
+  updateIdleCaret();
 }
 
 function showPrompt(center) {
   elements.form.hidden = false;
   resizeCommandInput();
-  elements.input.focus({ preventScroll: true });
+  if (!usesTouchKeyboard.matches) elements.input.focus({ preventScroll: true });
+  else if (document.activeElement === elements.input) elements.input.blur();
+  updateIdleCaret();
   if (center) elements.form.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function resetTerminalViewport() {
+  cancelAnimationFrame(scrollSaveFrame);
+  saveScrollPosition(0);
+
+  const resetScroll = () => window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  resetScroll();
+  requestAnimationFrame(() => requestAnimationFrame(resetScroll));
+
+  if (!usesTouchKeyboard.matches || !window.visualViewport) return;
+  const settleViewport = () => resetScroll();
+  window.visualViewport.addEventListener("resize", settleViewport);
+  setTimeout(() => {
+    window.visualViewport.removeEventListener("resize", settleViewport);
+    resetScroll();
+  }, 500);
 }
 
 function followOutputNaturally(output, revealPromise) {

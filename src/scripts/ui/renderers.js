@@ -101,7 +101,7 @@ export function createPortfolioOutput(items, label) {
           <div><h3 class="work-card__title">${item.title}</h3><p class="work-card__description">${item.description}</p></div>
           <div class="work-card__badges">
             ${item.documents?.length ? `<a class="project-card__status project-card__gallery-button work-card__diploma-button" href="award.html?award=${encodeURIComponent(item.id)}" target="_blank" rel="noreferrer">Diploma ↗</a>` : ""}
-            <span class="work-card__type">${item.type}</span>
+            <span class="project-card__status work-card__type">${item.type}</span>
           </div>
         </article>`).join("")}</div>
     </section>`).join("")}</div>`;

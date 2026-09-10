@@ -8,15 +8,14 @@ button,a { font:inherit; }
 .gallery-toolbar button,.award-toolbar button,.viewer__controls button { border-radius:3px; transition:color var(--viewer-interaction),background-color var(--viewer-interaction),border-color var(--viewer-interaction); }
 
 #gallery-original,#award-original { text-underline-offset:4px; transition:color var(--viewer-interaction),text-underline-offset var(--viewer-interaction); }
-#gallery-original:hover,#award-original:hover { text-underline-offset:6px; }
 .viewer { position:relative; color:var(--viewer-text); }
 .viewer__canvas,.viewer__poster { position:absolute; inset:0; width:100%; height:100%; }
 .viewer__canvas { z-index:1; display:block; touch-action:none; opacity:0; transition:opacity 260ms ease; }
-.viewer__poster { object-fit:contain; padding:clamp(70px,10vw,130px); opacity:.42; transition:opacity 260ms ease; }
+.viewer__poster { object-fit:contain; padding:clamp(70px,10vw,130px); opacity:.42; transform:scale(.9); transform-origin:center; transition:opacity 260ms ease; }
 .viewer--loaded .viewer__canvas { opacity:1; }
 .viewer--loaded .viewer__poster { opacity:0; }
 .viewer__header { position:absolute; z-index:2; top:0; left:0; display:flex; align-items:flex-start; gap:clamp(18px,3vw,36px); width:100%; padding:clamp(18px,3vw,32px); background:linear-gradient(to bottom,var(--viewer-panel),transparent); pointer-events:none; }
-.viewer__controls button:hover,.viewer__controls button:focus-visible { color:var(--viewer-bg); background:var(--viewer-accent); }
+.viewer__controls button:focus-visible { color:var(--viewer-bg); background:var(--viewer-accent); }
 .viewer__eyebrow { margin:1px 0 6px; color:var(--viewer-accent); font-size:.68rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; transition:color 300ms ease; }
 .viewer__title { margin:0; font-size:clamp(1rem,2.5vw,1.7rem); overflow-wrap:anywhere; }
 .viewer__controls { position:absolute; z-index:2; top:clamp(18px,3vw,32px); right:clamp(18px,3vw,32px); }
@@ -34,18 +33,16 @@ button,a { font:inherit; }
   .viewer__progress { overflow-wrap:anywhere; }
 }
 
+@media (max-width:620px) {
+  .viewer__controls button { -webkit-tap-highlight-color:transparent; }
+  .viewer__poster { transform:scale(1.035); }
+}
+
 @media (max-width:600px) {
   .gallery-page,.award-page { width:calc(100% - 20px); }
 }
 
-.gallery-toolbar button:disabled:hover,
-.gallery-toolbar button:disabled:focus-visible,
-.award-toolbar button:disabled:hover,
-.award-toolbar button:disabled:focus-visible,
-.viewer__controls button:disabled:hover,
-.viewer__controls button:disabled:focus-visible {
-  color:inherit;
-  background:inherit;
-  border-color:currentColor;
-  transform:none;
+@media (hover:hover) {
+  #gallery-original:hover,#award-original:hover { text-underline-offset:6px; }
+  .viewer__controls button:hover { color:var(--viewer-bg); background:var(--viewer-accent); }
 }

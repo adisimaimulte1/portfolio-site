@@ -61,6 +61,16 @@ async function loadModel(config) {
     controls.dampingFactor = .075;
     controls.enablePan = false;
 
+    const resize = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      renderer.setSize(width, height, false);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    };
+    window.addEventListener("resize", resize, { passive: true });
+    resize();
+
     scene.add(new THREE.HemisphereLight(0xffffff, 0x282828, 2.8));
     const keyLight = new THREE.DirectionalLight(0xffffff, 3.4);
     keyLight.position.set(4, 7, 6);
@@ -83,16 +93,6 @@ async function loadModel(config) {
       controls.update();
     });
     elements.reset.hidden = false;
-
-    const resize = () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      renderer.setSize(width, height, false);
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-    };
-    window.addEventListener("resize", resize, { passive: true });
-    resize();
 
     renderer.setAnimationLoop(() => {
       controls.update();
@@ -178,7 +178,10 @@ function frameModel(object, camera, controls) {
   const center = bounds.getCenter(new THREE.Vector3());
   const size = bounds.getSize(new THREE.Vector3());
   const radius = Math.max(size.x, size.y, size.z) * .5;
-  const distance = radius / Math.tan(THREE.MathUtils.degToRad(camera.fov * .5)) * 1.3;
+  const mobileFit = window.matchMedia("(max-width: 620px)").matches
+    ? Math.max(1.32, Math.min(1.52, .72 / camera.aspect))
+    : 1;
+  const distance = radius / Math.tan(THREE.MathUtils.degToRad(camera.fov * .5)) * 1.3 * mobileFit;
   const target = new THREE.Vector3();
 
   object.position.sub(center);

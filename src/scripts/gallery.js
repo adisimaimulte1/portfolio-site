@@ -20,6 +20,7 @@ const previous = document.querySelector("#gallery-previous");
 const next = document.querySelector("#gallery-next");
 let currentIndex = 0;
 let items = [];
+let swipeStart = null;
 
 function measureImage(media) {
   const box = media.getBoundingClientRect();
@@ -39,7 +40,6 @@ const imageSizeObserver = new ResizeObserver((entries) => {
   entries.map(({ target }) => measureImage(target)).forEach(sizeImage);
 });
 
-// Assign URLs only near the viewport, after the justified layout has its real size.
 const imageObserver = new IntersectionObserver((entries) => {
   const visible = entries.filter(({ isIntersecting }) => isIntersecting);
   visible.map(({ target }) => measureImage(target)).forEach(sizeImage);
@@ -71,9 +71,7 @@ if (!gallery) {
     const type = /\.(mp4|webm|ogv)$/i.test(src) ? "video" : "image";
     return { preview: (type === "video" ? VIDEO_PREVIEWS : PREVIEWS)[src], src: src.split("/").map(encodeURIComponent).join("/"), type };
   });
-  document.querySelector("#gallery-status").textContent = items.length
-    ? ""
-    : "gallery is empty";
+  document.querySelector("#gallery-status").textContent = items.length ? "" : "gallery is empty";
   document.querySelector("#gallery-status").hidden = items.length > 0;
   let index = 0;
   gallery.forEach(({ title, media: sources }, sectionIndex) => {
@@ -96,8 +94,15 @@ if (!gallery) {
       cancelAnimationFrame(layoutFrame);
       layoutFrame = requestAnimationFrame(() => {
         const width = collection.clientWidth;
+        if (window.matchMedia("(max-width: 600px)").matches) {
+          tiles.forEach((tile) => {
+            tile.style.removeProperty("width");
+            tile.style.removeProperty("height");
+          });
+          return;
+        }
         const gap = parseFloat(getComputedStyle(collection).gap);
-        const targetHeight = width < 600 ? 130 : 220;
+        const targetHeight = 220;
         getGalleryLayout(ratios, width, targetHeight, gap).forEach((size, index) => {
           tiles[index].style.width = `${Math.floor(size.width * 100) / 100}px`;
           tiles[index].style.height = `${size.height}px`;
@@ -115,7 +120,6 @@ if (!gallery) {
       const tileIndex = tiles.length;
       tiles.push(button);
       ratios.push(item.preview ? item.preview.width / item.preview.height : 1);
-      // Indexed dimensions make layout stable before any media loads.
       if (!item.preview && item.type === "image") {
         media.addEventListener("load", () => {
           if (media.naturalWidth && media.naturalHeight) {
@@ -200,7 +204,6 @@ function createMedia(item, index, thumbnail = false) {
     if (item.preview) {
       return createMedia({ ...item, type: "image", alt: `${project.title} video ${index + 1} preview` }, index, true);
     }
-    // Missing posters must never fall back to initializing a video while scrolling.
     const placeholder = document.createElement("span");
     placeholder.className = "gallery-tile__placeholder";
     placeholder.setAttribute("aria-hidden", "true");
@@ -220,8 +223,9 @@ function createMedia(item, index, thumbnail = false) {
     });
   } else {
     media.alt = item.alt || `${project.title} photo ${index + 1}`;
-    media.loading = "eager"; // IntersectionObserver controls when the request starts.
+    media.loading = "eager";
     media.decoding = "async";
+    media.addEventListener("load", () => media.classList.add("gallery-media--ready"), { once: true });
     if (item.preview) {
       media.width = item.preview.width;
       media.height = item.preview.height;
@@ -261,10 +265,8 @@ function showItem(index) {
   if (item.type === "image") media.loading = "eager";
   stage.replaceChildren(media.parentElement || media);
   if (item.type === "video") {
-    // Request playback during the click/key gesture; it starts once buffered.
     media.play().catch((error) => {
       if (error.name !== "NotAllowedError" || !dialog.open || !stage.contains(media)) return;
-      // Browsers that block sound autoplay can still start the video muted.
       media.muted = true;
       media.play().catch(() => {});
     });
@@ -278,7 +280,28 @@ function showItem(index) {
 previous.addEventListener("click", () => showItem(currentIndex - 1));
 next.addEventListener("click", () => showItem(currentIndex + 1));
 document.querySelector("#gallery-close").addEventListener("click", () => dialog.close());
+
+stage.addEventListener("pointerdown", (event) => {
+  if (event.pointerType !== "touch" || !stage.querySelector("img, video")) return;
+  swipeStart = { x: event.clientX, y: event.clientY, id: event.pointerId };
+});
+
+stage.addEventListener("pointerup", (event) => {
+  if (!swipeStart || event.pointerId !== swipeStart.id) return;
+  const dx = event.clientX - swipeStart.x;
+  const dy = event.clientY - swipeStart.y;
+  swipeStart = null;
+  if (Math.abs(dx) < 50 || Math.abs(dx) <= Math.abs(dy) * 1.25) return;
+  if (dx < 0 && currentIndex < items.length - 1) showItem(currentIndex + 1);
+  else if (dx > 0 && currentIndex > 0) showItem(currentIndex - 1);
+});
+
+stage.addEventListener("pointercancel", () => {
+  swipeStart = null;
+});
+
 dialog.addEventListener("close", () => {
+  swipeStart = null;
   releaseViewerMedia();
   stage.replaceChildren();
 });
@@ -288,13 +311,14 @@ function releaseViewerMedia() {
   if (video) {
     video.pause();
     video.removeAttribute("src");
-    video.load(); // Abort pending downloads and release the decoder/buffer.
+    video.load();
   }
   const image = stage.querySelector("img");
   if (!image) return;
   imageObserver.unobserve(image);
   imageSizeObserver.unobserve(image);
 }
+
 dialog.addEventListener("keydown", (event) => {
   if (event.target.closest("video") || event.altKey || event.ctrlKey || event.metaKey) return;
   if (event.key === "ArrowLeft" && currentIndex > 0) {
