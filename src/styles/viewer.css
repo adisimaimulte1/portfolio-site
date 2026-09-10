@@ -1,9 +1,14 @@
-:root { color-scheme:dark; --viewer-bg:#080909; --viewer-panel:rgba(8,9,9,.82); --viewer-text:#f4f1eb; --viewer-muted:#aaa59d; --viewer-border:#343434; --viewer-accent:#f56600; font-family:"Cascadia Code","Consolas",monospace; }
+:root { color-scheme:dark; --viewer-bg:#080909; --viewer-panel:rgba(8,9,9,.82); --viewer-text:#f4f1eb; --viewer-muted:#aaa59d; --viewer-border:#343434; --viewer-accent:#f56600; --viewer-interaction:180ms ease; font-family:"Cascadia Code","Consolas",monospace; }
 :root[data-theme="dark"] { --viewer-accent:#7651a8; }
 :root[data-theme="strawberry"] { --viewer-accent:#d9364b; }
 * { box-sizing:border-box; }
 html,body,.viewer { width:100%; height:100%; margin:0; overflow:hidden; background:var(--viewer-bg); }
 button,a { font:inherit; }
+.gallery-page,.award-page { width:min(1440px,calc(100% - 48px)); margin-inline:auto; }
+.gallery-toolbar button,.award-toolbar button,.viewer__controls button { border-radius:3px; transition:color var(--viewer-interaction),background-color var(--viewer-interaction),border-color var(--viewer-interaction); }
+
+#gallery-original,#award-original { text-underline-offset:4px; transition:color var(--viewer-interaction),text-underline-offset var(--viewer-interaction); }
+#gallery-original:hover,#award-original:hover { text-underline-offset:6px; }
 .viewer { position:relative; color:var(--viewer-text); }
 .viewer__canvas,.viewer__poster { position:absolute; inset:0; width:100%; height:100%; }
 .viewer__canvas { z-index:1; display:block; touch-action:none; opacity:0; transition:opacity 260ms ease; }
@@ -27,4 +32,20 @@ button,a { font:inherit; }
   .viewer__poster { padding:70px 20px 45px; }
   .viewer__hint { max-width:calc(100% - 36px); line-height:1.5; bottom:max(15px,env(safe-area-inset-bottom)); }
   .viewer__progress { overflow-wrap:anywhere; }
+}
+
+@media (max-width:600px) {
+  .gallery-page,.award-page { width:calc(100% - 20px); }
+}
+
+.gallery-toolbar button:disabled:hover,
+.gallery-toolbar button:disabled:focus-visible,
+.award-toolbar button:disabled:hover,
+.award-toolbar button:disabled:focus-visible,
+.viewer__controls button:disabled:hover,
+.viewer__controls button:disabled:focus-visible {
+  color:inherit;
+  background:inherit;
+  border-color:currentColor;
+  transform:none;
 }

@@ -1,6 +1,6 @@
 import { SHELLS, THEMES } from "../config/constants.js";
 import { PORTFOLIO_ITEMS } from "../data/portfolio.js";
-import { PROJECTS } from "../data/projects.js";
+import { PROJECTS as PROJECT_DATA } from "../data/projects.js";
 import { CONTACTS } from "../data/contact.js";
 import { SKILLS } from "../data/skills.js";
 import { LINUX_HIDDEN_COMMANDS, POWERSHELL_HIDDEN_COMMANDS } from "../data/easter-eggs.js";
@@ -8,6 +8,30 @@ import { setAccentTheme } from "../ui/theme.js";
 import { createAboutOutput, createContactOutput, createErrorOutput, createHelpOutput, createHiddenHelpOutput, createOptionsOutput, createPortfolioOutput, createProjectsOutput, createSkillsOutput } from "../ui/renderers.js";
 import { resolveEasterEgg } from "./easter-eggs.js";
 import { getPublicCommands, getShellCommand, parseShellCommand } from "./shells.js";
+
+const PROJECTS = Object.freeze(PROJECT_DATA.map((project) => project.id === "phronima-v3" ? {
+  ...project,
+  summary: "A competition-built evolution of Phronima V2 that kept the same core architecture while strengthening the intake and upgrading the outtake for faster motors, reliable homing, and easier maintenance.",
+  details: [
+    "Added a second outtake motor so higher-RPM motors could be used while retaining enough torque to lift the robot.",
+    "Removed the second set of hanging hooks after the previous setup lacked the torque to lift onto the second bar, focusing the mechanism on the achievable climb.",
+    "Redesigned the structural plates and reinforced the intake after one-sided stringing let it twist in real use and break an aluminum connection part.",
+    "Added touch sensors for homing, restrung the outtake, and replaced the 3D-printed cover with a plexiglass panel that was easier to remove for service."
+  ],
+  tags: ["Fusion 360", "FTC", "CAD", "Mecanum", "Dual-Motor Outtake", "Touch Sensors", "Plexiglass", "Mechanical Iteration"]
+} : project.id === "sideswipe-v3" ? {
+  ...project,
+  links: project.links.map((link) => link.label === "Additional robot videos"
+    ? { ...link, label: "Driver POV Videos" }
+    : link)
+} : project.id === "phronima-v4" ? {
+  ...project,
+  links: [
+    ...project.links.slice(0, 1),
+    { label: "Robot code", href: "https://github.com/exorosFTC/IntoTheDeeP" },
+    ...project.links.slice(1)
+  ]
+} : project));
 
 const OPTIONS = Object.freeze({
   projects: [

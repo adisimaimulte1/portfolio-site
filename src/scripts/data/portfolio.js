@@ -1,5 +1,7 @@
 export const PORTFOLIO_ITEMS = Object.freeze([
-  { id: "2026-infoeducatie-national", year: 2026, competition: "InfoEducație", title: "3rd Place & Gold Medal", description: "National Stage · Software Utility · with Unilearn", type: "Award" },
+  { id: "2026-infoeducatie-national", year: 2026, competition: "InfoEducație", title: "3rd Place & Gold Medal", description: "National Stage · Software Utility · with Unilearn", type: "Award", documents: [
+    { label: "National diploma", src: "assets/awards/2026-infoeducatie-national-third-place.jpg" }
+  ] },
   { id: "2026-infoeducatie-county", year: 2026, competition: "InfoEducație", title: "1st Place", description: "County Stage · Software Utility", type: "Award", documents: [
     { label: "Award diploma", src: "assets/awards/2026-infoeducatie-county-first-place.jpg" }
   ] },

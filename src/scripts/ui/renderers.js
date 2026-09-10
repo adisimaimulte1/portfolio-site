@@ -4,6 +4,13 @@ import { getProjectGallery } from "../data/galleries.js";
 
 const CAD_RESOURCE_ORDER = Object.freeze({ preview: 0, instructions: 1, download: 2 });
 
+const FEATURED_PROJECTS = Object.freeze({
+  "sideswipe-v3": "11 kg · ~0.3 s triple-ball cycle · competition robot",
+  "unilearn": "3rd Place & Gold Medal · InfoEducație 2026",
+  "a-shell": "Native Windows · reversible customization environment",
+  "pythfinder": "2nd Place & Gold Medal · InfoEducație 2024"
+});
+
 export function createCommandEntry(rawCommand, outputHtml, shell) {
   const entry = document.createElement("section");
   entry.className = "history-entry";
@@ -104,16 +111,33 @@ export function createProjectsOutput(projects, label = "projects") {
   if (!projects.length) return `<p class="empty-output">No ${label} were found.</p>`;
   const orderedProjects = [...projects].sort((first, second) => second.year - first.year
     || (second.timelineOrder ?? 0) - (first.timelineOrder ?? 0));
-  return `<div class="project-list">${orderedProjects.map((project) => `
-    <article class="project-card">
+  const featuredProjects = orderedProjects.filter(({ id }) => FEATURED_PROJECTS[id]).slice(0, 4);
+  const featuredOutput = featuredProjects.length > 1 ? `
+    <section class="featured-projects" aria-labelledby="featured-projects-title">
+      <div class="featured-projects__heading">
+        <p class="featured-projects__eyebrow">Selected work</p>
+        <h2 id="featured-projects-title">Start here</h2>
+      </div>
+      <div class="featured-projects__grid">
+        ${featuredProjects.map((project) => `<a class="featured-project" href="#project-${project.id}">
+          <span class="featured-project__meta">${project.year} · ${project.competition}</span>
+          <strong>${project.title}</strong>
+          <span>${FEATURED_PROJECTS[project.id]}</span>
+        </a>`).join("")}
+      </div>
+    </section>` : "";
+
+  return `${featuredOutput}<div class="project-list">${orderedProjects.map((project) => `
+    <article class="project-card${FEATURED_PROJECTS[project.id] ? " project-card--featured" : ""}" id="project-${project.id}">
       <header class="project-card__header">
         <div><p class="project-card__meta">${project.year} · ${project.competition} · ${project.categories.join(" · ")}</p><h2 class="project-card__title">${project.title}</h2></div>
         <div class="project-card__badges">
           ${getProjectGallery(project) ? `<a class="project-card__status project-card__gallery-button" href="gallery.html?project=${encodeURIComponent(project.id)}" target="_blank" rel="noreferrer">Gallery ↗</a>` : ""}
-          <span class="project-card__status">Project</span>
+          ${FEATURED_PROJECTS[project.id] ? `<span class="project-card__status project-card__featured-badge">Featured</span>` : `<span class="project-card__status">Project</span>`}
         </div>
       </header>
       <p class="project-card__summary">${project.summary}</p>
+      ${FEATURED_PROJECTS[project.id] ? `<p class="project-card__outcome">${FEATURED_PROJECTS[project.id]}</p>` : ""}
       <ul class="project-card__details">${project.details.map((detail) => `<li>${detail}</li>`).join("")}</ul>
       ${project.campaign ? `<aside class="project-campaign">
         <p class="project-campaign__label">Campaign case study</p>

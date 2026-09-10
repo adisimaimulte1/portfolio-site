@@ -76,13 +76,12 @@ html,body { height:auto; min-height:100%; overflow:auto; }
   width:100%;
   max-height:680px;
   object-fit:contain;
-  transition:filter 300ms ease,transform 300ms ease;
+  transition:filter 180ms ease;
 }
 
 .award-card__preview:hover img,
 .award-card__preview:focus-visible img {
-  filter:brightness(1.06);
-  transform:scale(1.01);
+  filter:brightness(1.04);
 }
 
 .award-card__label {
@@ -138,6 +137,7 @@ html,body { height:auto; min-height:100%; overflow:auto; }
   background:transparent;
   border:1px solid currentColor;
   cursor:pointer;
+  transition:color 180ms ease,background-color 180ms ease,border-color 180ms ease;
 }
 
 .award-toolbar button:hover {
@@ -228,4 +228,12 @@ html:has(.award-viewer[open]) { overflow:hidden; }
 
   #award-close { grid-column:1 / -1; }
   .award-toolbar button { font-size:.72rem; }
+}
+
+.award-toolbar button:disabled:hover,
+.award-toolbar button:disabled:focus-visible {
+  color:var(--color-accent);
+  background:transparent;
+  border-color:currentColor;
+  transform:none;
 }
