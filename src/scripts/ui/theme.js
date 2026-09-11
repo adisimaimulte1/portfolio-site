@@ -3,6 +3,9 @@ import { STORAGE_KEYS, THEMES } from "../config/constants.js";
 const root = document.documentElement;
 let button;
 let previousTheme = THEMES.light;
+let viewportAnimation = null;
+let viewportAnimationFrame = null;
+let previousButtonTop = null;
 
 export function initializeTheme(themeButton) {
   button = themeButton;
@@ -13,6 +16,7 @@ export function initializeTheme(themeButton) {
   setTheme(savedTheme || THEMES.light);
   button.addEventListener("click", () => toggleTheme(true));
   button.addEventListener("animationend", () => button.classList.remove("is-changing"));
+  initializeViewportAnimation();
 }
 
 export function toggleTheme(remember = true) {
@@ -58,4 +62,41 @@ function animateButton() {
   button.classList.remove("is-changing");
   void button.offsetWidth;
   button.classList.add("is-changing");
+}
+
+function initializeViewportAnimation() {
+  if (!window.visualViewport) return;
+  requestAnimationFrame(() => {
+    previousButtonTop = button.getBoundingClientRect().top;
+  });
+  window.visualViewport.addEventListener("resize", animateViewportShift);
+}
+
+function animateViewportShift() {
+  cancelAnimationFrame(viewportAnimationFrame);
+  viewportAnimationFrame = requestAnimationFrame(() => {
+    const previousVisualTop = viewportAnimation
+      ? button.getBoundingClientRect().top
+      : previousButtonTop;
+    viewportAnimation?.cancel();
+
+    const nextTop = button.getBoundingClientRect().top;
+    previousButtonTop = nextTop;
+    const offset = previousVisualTop === null ? 0 : previousVisualTop - nextTop;
+    if (Math.abs(offset) < 1 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    // The old position can fall outside the resized keyboard viewport. Keep the
+    // visible slide short and fade it in so the viewport edge never clips it.
+    const visibleOffset = Math.sign(offset) * Math.min(Math.abs(offset), button.offsetHeight * .4);
+    viewportAnimation = button.animate([
+      { translate: `0 ${visibleOffset}px`, opacity: offset > 0 ? 0 : 1 },
+      { translate: "0 0", opacity: 1 }
+    ], {
+      duration: 300,
+      easing: "cubic-bezier(.22, 1, .36, 1)"
+    });
+    viewportAnimation.addEventListener("finish", () => {
+      viewportAnimation = null;
+    }, { once: true });
+  });
 }
