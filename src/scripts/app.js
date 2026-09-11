@@ -28,7 +28,8 @@ let inputScrollStarted = false;
 let inputScrollAnimationFrame = null;
 let inputScrollStartTime = null;
 let inputScrollStartPosition = 0;
-let mobileFocusSettleTimer = null;
+let inputScrollPreviousBehavior = null;
+let inputScrollCompletion = null;
 const usesTouchKeyboard = window.matchMedia("(hover: none) and (pointer: coarse)");
 usesTouchKeyboard.addEventListener("change", updateIdleCaret);
 
@@ -48,6 +49,7 @@ elements.form.addEventListener("submit", async (event) => {
   const command = elements.input.value.trim();
   if (!command || isPromptHidden()) return;
 
+  if (usesTouchKeyboard.matches && document.activeElement === elements.input) elements.input.blur();
   elements.input.value = "";
   resetInputScroll();
   resizeCommandInput();
@@ -141,10 +143,7 @@ function resizeCommandInput(forceRemeasure = false) {
 elements.input.addEventListener("input", () => resizeCommandInput());
 elements.input.addEventListener("input", updateIdleCaret);
 elements.input.addEventListener("input", followInputToPageEnd);
-elements.input.addEventListener("focus", () => {
-  updateIdleCaret();
-  if (usesTouchKeyboard.matches) keepFocusedInputAtPageEnd();
-});
+elements.input.addEventListener("focus", updateIdleCaret);
 elements.input.addEventListener("blur", updateIdleCaret);
 
 function followInputToPageEnd() {
@@ -160,6 +159,9 @@ function followInputToPageEnd() {
   inputScrollStarted = true;
   inputScrollStartTime = null;
   inputScrollStartPosition = window.scrollY;
+  inputScrollPreviousBehavior = document.documentElement.style.scrollBehavior;
+  document.documentElement.style.scrollBehavior = "auto";
+  window.visualViewport?.addEventListener("resize", settleInputAfterViewportResize);
   lockScrollInput();
   inputScrollAnimationFrame = requestAnimationFrame(advanceInputScroll);
 }
@@ -178,6 +180,9 @@ function advanceInputScroll(timestamp) {
     jumpToPosition(destination);
     inputScrollAnimationFrame = null;
     unlockScrollInput();
+    const completion = inputScrollCompletion;
+    inputScrollCompletion = null;
+    completion?.();
   }
 }
 
@@ -186,7 +191,17 @@ function resetInputScroll() {
   inputScrollStartTime = null;
   cancelAnimationFrame(inputScrollAnimationFrame);
   inputScrollAnimationFrame = null;
+  inputScrollCompletion = null;
+  if (inputScrollPreviousBehavior !== null) {
+    document.documentElement.style.scrollBehavior = inputScrollPreviousBehavior;
+    inputScrollPreviousBehavior = null;
+  }
+  window.visualViewport?.removeEventListener("resize", settleInputAfterViewportResize);
   unlockScrollInput();
+}
+
+function settleInputAfterViewportResize() {
+  if (inputScrollStarted && inputScrollAnimationFrame === null) jumpToPageEnd();
 }
 
 function blockPointerScroll(event) {
@@ -211,32 +226,12 @@ function unlockScrollInput() {
   window.removeEventListener("keydown", blockKeyboardScroll, true);
 }
 
-function keepFocusedInputAtPageEnd() {
-  window.scrollTo({
-    top: document.documentElement.scrollHeight,
-    behavior: "smooth"
-  });
-
-  if (!window.visualViewport) return;
-  clearTimeout(mobileFocusSettleTimer);
-  window.visualViewport.removeEventListener("resize", jumpToPageEnd);
-  window.visualViewport.addEventListener("resize", jumpToPageEnd);
-  mobileFocusSettleTimer = setTimeout(() => {
-    window.visualViewport.removeEventListener("resize", jumpToPageEnd);
-    mobileFocusSettleTimer = null;
-  }, 500);
-}
-
 function jumpToPageEnd() {
   jumpToPosition(document.documentElement.scrollHeight);
 }
 
 function jumpToPosition(position) {
-  const root = document.documentElement;
-  const previousBehavior = root.style.scrollBehavior;
-  root.style.scrollBehavior = "auto";
   window.scrollTo(0, position);
-  root.style.scrollBehavior = previousBehavior;
 }
 
 function updateIdleCaret() {
@@ -257,9 +252,21 @@ commandInputObserver.observe(elements.input, { box: "content-box" });
 elements.history.addEventListener("click", (event) => {
   const button = event.target.closest("[data-command]");
   if (!button || isPromptHidden()) return;
+  resetInputScroll();
   elements.input.value = button.dataset.command;
-  elements.input.focus({ preventScroll: true });
   moveCommandCaretToEnd();
+
+  if (usesTouchKeyboard.matches) {
+    inputScrollCompletion = () => {
+      elements.input.focus();
+      moveCommandCaretToEnd();
+      requestAnimationFrame(moveCommandCaretToEnd);
+    };
+    followInputToPageEnd();
+  } else {
+    elements.input.focus({ preventScroll: true });
+    followInputToPageEnd();
+  }
 });
 
 elements.terminal.addEventListener("click", (event) => {
@@ -299,6 +306,7 @@ async function renderEntry(entryRecord, html, options = {}) {
 }
 
 function hidePrompt() {
+  if (usesTouchKeyboard.matches && document.activeElement === elements.input) elements.input.blur();
   elements.form.classList.add("terminal__form--busy");
   updateIdleCaret();
 }
@@ -307,9 +315,8 @@ function showPrompt(center) {
   elements.form.hidden = false;
   elements.form.classList.remove("terminal__form--busy");
   resizeCommandInput();
-  elements.input.focus({ preventScroll: true });
+  if (!usesTouchKeyboard.matches) elements.input.focus({ preventScroll: true });
   updateIdleCaret();
-  if (usesTouchKeyboard.matches) keepFocusedInputAtPageEnd();
   if (center) elements.form.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
