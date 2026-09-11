@@ -140,7 +140,7 @@ function resolvePortfolio(items, label, option, values) {
 }
 
 function resolveProjects(option, values) {
-  if (["--all", "-a"].includes(option)) return createProjectsOutput(PROJECTS);
+  if (["--all", "-a"].includes(option)) return createProjectsOutput(PROJECTS, "projects", { showFeatured: true });
   if (["--search", "-s"].includes(option)) {
     const query = normalizeSearch(values.join(" "));
     if (!query) return createOptionError(`projects ${option}`, "Add a search term after the option.");

@@ -20,8 +20,15 @@ const elements = Object.freeze({
 const entries = loadEntries();
 const restoredScrollPosition = loadScrollPosition();
 const commandHistory = loadCommandHistory();
+const SCROLLING_KEYS = new Set(["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "]);
 let historyPosition = commandHistory.length;
 let currentShell = loadShell();
+let previousInputLength = elements.input.value.length;
+let inputScrollStarted = false;
+let inputScrollAnimationFrame = null;
+let inputScrollStartTime = null;
+let inputScrollStartPosition = 0;
+let mobileFocusSettleTimer = null;
 const usesTouchKeyboard = window.matchMedia("(hover: none) and (pointer: coarse)");
 usesTouchKeyboard.addEventListener("change", updateIdleCaret);
 
@@ -39,9 +46,10 @@ window.addEventListener("scroll", () => {
 elements.form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const command = elements.input.value.trim();
-  if (!command || elements.form.hidden) return;
+  if (!command || isPromptHidden()) return;
 
   elements.input.value = "";
+  resetInputScroll();
   resizeCommandInput();
   commandHistory.push(command);
   commandHistory.splice(0, Math.max(0, commandHistory.length - COMMAND_HISTORY_LIMIT));
@@ -91,6 +99,10 @@ elements.input.addEventListener("keydown", (event) => {
 });
 
 elements.input.addEventListener("beforeinput", (event) => {
+  if (isPromptHidden()) {
+    event.preventDefault();
+    return;
+  }
   if (!event.isComposing && ["insertParagraph", "insertLineBreak"].includes(event.inputType)) {
     event.preventDefault();
     elements.form.requestSubmit();
@@ -111,19 +123,121 @@ function moveCommandCaretToEnd() {
   resizeCommandInput();
 }
 
-function resizeCommandInput() {
+function resizeCommandInput(forceRemeasure = false) {
   // Indent only the first line; wrapped lines use the full terminal width.
   const promptWidth = elements.form.querySelector(".prompt").getBoundingClientRect().width;
   elements.form.style.setProperty("--prompt-width", `${promptWidth}px`);
   elements.input.style.setProperty("--prompt-width", `${promptWidth}px`);
-  elements.input.style.height = "0px";
-  elements.input.style.height = `${elements.input.scrollHeight}px`;
+  const inputLength = elements.input.value.length;
+  const mayHaveShrunk = inputLength < previousInputLength;
+  if (forceRemeasure || mayHaveShrunk) elements.input.style.height = "0px";
+  const requiredHeight = elements.input.scrollHeight;
+  if (forceRemeasure || mayHaveShrunk || requiredHeight > elements.input.clientHeight) {
+    elements.input.style.height = `${requiredHeight}px`;
+  }
+  previousInputLength = inputLength;
 }
 
-elements.input.addEventListener("input", resizeCommandInput);
+elements.input.addEventListener("input", () => resizeCommandInput());
 elements.input.addEventListener("input", updateIdleCaret);
-elements.input.addEventListener("focus", updateIdleCaret);
+elements.input.addEventListener("input", followInputToPageEnd);
+elements.input.addEventListener("focus", () => {
+  updateIdleCaret();
+  if (usesTouchKeyboard.matches) keepFocusedInputAtPageEnd();
+});
 elements.input.addEventListener("blur", updateIdleCaret);
+
+function followInputToPageEnd() {
+  if (!elements.input.value) {
+    resetInputScroll();
+    return;
+  }
+  if (inputScrollStarted) {
+    if (inputScrollAnimationFrame === null) jumpToPageEnd();
+    return;
+  }
+
+  inputScrollStarted = true;
+  inputScrollStartTime = null;
+  inputScrollStartPosition = window.scrollY;
+  lockScrollInput();
+  inputScrollAnimationFrame = requestAnimationFrame(advanceInputScroll);
+}
+
+function advanceInputScroll(timestamp) {
+  if (!inputScrollStarted) return;
+  inputScrollStartTime ??= timestamp;
+  const progress = Math.min(1, (timestamp - inputScrollStartTime) / AUTO_SCROLL.inputDuration);
+  const easedProgress = 1 - ((1 - progress) ** 3);
+  const destination = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+  jumpToPosition(inputScrollStartPosition + ((destination - inputScrollStartPosition) * easedProgress));
+
+  if (progress < 1) {
+    inputScrollAnimationFrame = requestAnimationFrame(advanceInputScroll);
+  } else {
+    jumpToPosition(destination);
+    inputScrollAnimationFrame = null;
+    unlockScrollInput();
+  }
+}
+
+function resetInputScroll() {
+  inputScrollStarted = false;
+  inputScrollStartTime = null;
+  cancelAnimationFrame(inputScrollAnimationFrame);
+  inputScrollAnimationFrame = null;
+  unlockScrollInput();
+}
+
+function blockPointerScroll(event) {
+  event.preventDefault();
+}
+
+function blockKeyboardScroll(event) {
+  if (!SCROLLING_KEYS.has(event.key)) return;
+  event.preventDefault();
+  event.stopPropagation();
+}
+
+function lockScrollInput() {
+  window.addEventListener("wheel", blockPointerScroll, { passive: false });
+  window.addEventListener("touchmove", blockPointerScroll, { passive: false });
+  window.addEventListener("keydown", blockKeyboardScroll, true);
+}
+
+function unlockScrollInput() {
+  window.removeEventListener("wheel", blockPointerScroll);
+  window.removeEventListener("touchmove", blockPointerScroll);
+  window.removeEventListener("keydown", blockKeyboardScroll, true);
+}
+
+function keepFocusedInputAtPageEnd() {
+  window.scrollTo({
+    top: document.documentElement.scrollHeight,
+    behavior: "smooth"
+  });
+
+  if (!window.visualViewport) return;
+  clearTimeout(mobileFocusSettleTimer);
+  window.visualViewport.removeEventListener("resize", jumpToPageEnd);
+  window.visualViewport.addEventListener("resize", jumpToPageEnd);
+  mobileFocusSettleTimer = setTimeout(() => {
+    window.visualViewport.removeEventListener("resize", jumpToPageEnd);
+    mobileFocusSettleTimer = null;
+  }, 500);
+}
+
+function jumpToPageEnd() {
+  jumpToPosition(document.documentElement.scrollHeight);
+}
+
+function jumpToPosition(position) {
+  const root = document.documentElement;
+  const previousBehavior = root.style.scrollBehavior;
+  root.style.scrollBehavior = "auto";
+  window.scrollTo(0, position);
+  root.style.scrollBehavior = previousBehavior;
+}
 
 function updateIdleCaret() {
   elements.form.classList.toggle(
@@ -136,20 +250,20 @@ let commandInputWidth = 0;
 const commandInputObserver = new ResizeObserver(([entry]) => {
   if (entry.contentRect.width === commandInputWidth) return;
   commandInputWidth = entry.contentRect.width;
-  resizeCommandInput();
+  resizeCommandInput(true);
 });
 commandInputObserver.observe(elements.input, { box: "content-box" });
 
 elements.history.addEventListener("click", (event) => {
   const button = event.target.closest("[data-command]");
-  if (!button || elements.form.hidden) return;
+  if (!button || isPromptHidden()) return;
   elements.input.value = button.dataset.command;
   elements.input.focus({ preventScroll: true });
   moveCommandCaretToEnd();
 });
 
 elements.terminal.addEventListener("click", (event) => {
-  if (!elements.form.hidden && !event.target.closest("button, a")) elements.input.focus({ preventScroll: true });
+  if (!isPromptHidden() && !event.target.closest("button, a")) elements.input.focus({ preventScroll: true });
 });
 
 async function initializeTerminal() {
@@ -185,18 +299,22 @@ async function renderEntry(entryRecord, html, options = {}) {
 }
 
 function hidePrompt() {
-  if (usesTouchKeyboard.matches && document.activeElement === elements.input) elements.input.blur();
-  elements.form.hidden = true;
+  elements.form.classList.add("terminal__form--busy");
   updateIdleCaret();
 }
 
 function showPrompt(center) {
   elements.form.hidden = false;
+  elements.form.classList.remove("terminal__form--busy");
   resizeCommandInput();
-  if (!usesTouchKeyboard.matches) elements.input.focus({ preventScroll: true });
-  else if (document.activeElement === elements.input) elements.input.blur();
+  elements.input.focus({ preventScroll: true });
   updateIdleCaret();
+  if (usesTouchKeyboard.matches) keepFocusedInputAtPageEnd();
   if (center) elements.form.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+function isPromptHidden() {
+  return elements.form.hidden || elements.form.classList.contains("terminal__form--busy");
 }
 
 function resetTerminalViewport() {
@@ -222,6 +340,7 @@ function followOutputNaturally(output, revealPromise) {
     let latestTarget = null;
     let scrollDestination = window.scrollY;
     let scrollWorker = null;
+    lockScrollInput();
 
     function queueScroll(destination) {
       const maximumScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
@@ -264,6 +383,7 @@ function followOutputNaturally(output, revealPromise) {
     Promise.allSettled([revealPromise, waitForImages(images, () => followTarget(latestTarget))]).then(async () => {
       output.removeEventListener("animationstart", handleRevealStart);
       await queueScroll(document.documentElement.scrollHeight);
+      unlockScrollInput();
       resolve();
     });
   });

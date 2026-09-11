@@ -10,10 +10,10 @@
 .history-entry__output.reveal-frame::before { animation:output-rail-reveal 320ms ease-out both; animation-delay:inherit; }
 .history-entry__output>:first-child { margin-top:0; } .history-entry__output>:last-child { margin-bottom:0; }
 .prompt { flex:none; color:var(--color-text); font-weight:700; }
-.terminal__form { position:relative; display:block; margin-top:var(--space-command); scroll-margin-block:32px; line-height:1.5; overflow-wrap:anywhere; }
+.terminal__form { position:relative; display:block; margin-top:var(--space-command); scroll-margin-block:32px; line-height:1.5; overflow-wrap:anywhere; overflow-anchor:none; }
 .terminal__form .prompt,.history-entry__command .prompt { display:inline-block; max-width:calc(100% - 5ch); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; vertical-align:bottom; margin-right:.65ch; }
 .terminal__history:empty + .terminal__form { margin-top:0; }
-.terminal__form[hidden] { display:block !important; visibility:hidden; pointer-events:none; }
+.terminal__form[hidden],.terminal__form--busy { display:block !important; opacity:0; pointer-events:none; }
 .terminal__form .prompt { position:absolute; top:0; left:0; max-width:60%; margin-right:0; line-height:1.5; pointer-events:none; }
 .terminal__input { display:block; width:100%; min-width:0; height:1.5em; min-height:1.5em; margin:0; padding:0; border:0; border-radius:0; resize:none; overflow:hidden; font:inherit; line-height:1.5; text-indent:calc(var(--prompt-width,0px) + .65ch); color:var(--color-text); background:transparent; caret-color:var(--color-text); white-space:pre-wrap; overflow-wrap:anywhere; outline:0; }
 .terminal__form--idle-caret::after { position:absolute; top:.12em; left:calc(var(--prompt-width,0px) + .65ch); width:1px; height:1.2em; background:currentColor; content:""; pointer-events:none; animation:terminal-idle-caret 1s steps(1,end) infinite; }

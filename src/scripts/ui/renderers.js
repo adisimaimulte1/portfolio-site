@@ -107,11 +107,13 @@ export function createPortfolioOutput(items, label) {
     </section>`).join("")}</div>`;
 }
 
-export function createProjectsOutput(projects, label = "projects") {
+export function createProjectsOutput(projects, label = "projects", { showFeatured = false } = {}) {
   if (!projects.length) return `<p class="empty-output">No ${label} were found.</p>`;
   const orderedProjects = [...projects].sort((first, second) => second.year - first.year
     || (second.timelineOrder ?? 0) - (first.timelineOrder ?? 0));
-  const featuredProjects = orderedProjects.filter(({ id }) => FEATURED_PROJECTS[id]).slice(0, 4);
+  const featuredProjects = showFeatured
+    ? orderedProjects.filter(({ id }) => FEATURED_PROJECTS[id]).slice(0, 4)
+    : [];
   const featuredOutput = featuredProjects.length > 1 ? `
     <section class="featured-projects" aria-labelledby="featured-projects-title">
       <div class="featured-projects__heading">

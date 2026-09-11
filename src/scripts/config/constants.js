@@ -15,6 +15,7 @@ export const COMMAND_HISTORY_LIMIT = 10;
 export const REVEAL = Object.freeze({ duration: 320, stagger: 75 });
 export const AUTO_SCROLL = Object.freeze({
   viewportMargin: 32,
+  inputDuration: 600,
   positionTolerance: 1,
   movementTolerance: .5,
   settledFrameCount: 4,
